@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FalloutLiveRadio</string>
+    <string name="menu_button">Go to Radio</string>
+    <string name="play_button">Play Radio</string>
+</resources>
