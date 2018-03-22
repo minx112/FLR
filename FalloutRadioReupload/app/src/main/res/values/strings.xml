@@ -2,4 +2,27 @@
     <string name="app_name">FalloutLiveRadio</string>
     <string name="menu_button">Go to Radio</string>
     <string name="play_button">Play Radio</string>
+
+    <string-array name="soundNames">
+        <item>Billie Holliday - Crazy</item> <!-- audio1  -->
+        <item>Billie Holliday - Easy</item> <!-- audio2  -->
+        <item>Bob Crosby - Happy</item> <!-- audio3  -->
+        <item>Bob Crosby - Way</item> <!-- audio4  -->
+        <item>Cole Porter - Anything</item> <!-- audio5  -->
+        <item>Danny Kaye - Civilization</item> <!-- audio6  -->
+        <item>Ella Fitzgerald - Intro</item> <!-- audio7  -->
+        <item>Generic Boogie</item> <!-- audio8  -->
+        <item>Generic Fox</item> <!-- audio9  -->
+        <item>Generic Jazzy</item> <!-- audio10 -->
+        <item>Generic Jolly</item> <!-- audio11 -->
+        <item>Generic Pink</item> <!-- audio12 -->
+        <item>Generic Rhythm For You</item> <!-- audio13 -->
+        <item></item> <!-- audio14 -->
+        <item></item> <!-- audio15 -->
+        <item></item> <!-- audio16 -->
+        <item></item> <!-- audio17 -->
+        <item></item> <!-- audio18 -->
+        <item></item> <!-- audio19 -->
+        <item></item> <!-- audio20 -->
+    </string-array>
 </resources>

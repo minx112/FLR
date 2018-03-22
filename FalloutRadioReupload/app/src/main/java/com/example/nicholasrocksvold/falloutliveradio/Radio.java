@@ -1,29 +1,29 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import java.util.ArrayList;
 
-public class Radio extends AppCompatActivity {
+public class Radio {
 
-    private Button mPlayButton;
+    //Radio class holds the Name and array of songs
+    public String radioName;
+    public ArrayList<SoundObject> songs;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_radio);
+    public Radio(String radioName, int start, int end)
+    {
+        int range = end - start;
 
-        mPlayButton = (Button) findViewById(R.id.play_button);
+        this.radioName = radioName;
 
-        mPlayButton.setText(R.string.play_button);
-
-        mPlayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //This button will play the radio
-
-            }
-        });
+        for(int i = 0; i < range; i++)
+        {
+            songs.add(new SoundObject(nameList))
+        }
     }
+
+/*
+    public int soungAmount(Radio radio)
+    {
+        return radio.songs.
+    }
+*/
 }

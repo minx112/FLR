@@ -22,7 +22,7 @@ public class MainMenu extends AppCompatActivity {
         mRadioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainMenu.this, Radio.class);
+                Intent myIntent = new Intent(MainMenu.this, RadioMenu.class);
                 startActivity(myIntent);
 
             }
