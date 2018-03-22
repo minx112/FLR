@@ -17,12 +17,12 @@
         <item>Generic Jolly</item> <!-- audio11 -->
         <item>Generic Pink</item> <!-- audio12 -->
         <item>Generic Rhythm For You</item> <!-- audio13 -->
-        <item></item> <!-- audio14 -->
-        <item></item> <!-- audio15 -->
-        <item></item> <!-- audio16 -->
-        <item></item> <!-- audio17 -->
-        <item></item> <!-- audio18 -->
-        <item></item> <!-- audio19 -->
-        <item></item> <!-- audio20 -->
+        <item>Generic Sunning</item> <!-- audio14 -->
+        <item>Generic Swing Doors</item> <!-- audio15 -->
+        <item>Inkspots - I Don't</item> <!-- audio16 -->
+        <item>Inkspots - Maybe</item> <!-- audio17 -->
+        <item>Roy Brown - Butcher</item> <!-- audio18 -->
+        <item>Roy Brown - Mighty</item> <!-- audio19 -->
+        <item>Tex Beneke - Guy</item> <!-- audio20 -->
     </string-array>
 </resources>
