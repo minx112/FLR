@@ -24,6 +24,9 @@ public class RadioMenu extends AppCompatActivity {
                 R.raw.song12, R.raw.song13, R.raw.song14, R.raw.song15, R.raw.song16, R.raw.song17,
                 R.raw.song18, R.raw.song19, R.raw.song20};
 
+        final int[] GNRNews = new int[] {R.raw.story1, R.raw.story2, R.raw.story3, R.raw.story4,
+                R.raw.story5, R.raw.story6, R.raw.story7, R.raw. story8, R.raw.story9, R.raw.story10};
+
         mPlayButton = (Button) findViewById(R.id.play_button);
 
         mPlayButton.setText(R.string.play_button);
