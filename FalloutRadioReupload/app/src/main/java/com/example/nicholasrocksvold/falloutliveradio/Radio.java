@@ -28,7 +28,7 @@ public class Radio {
             int modifier = start + i; //modifier used because of range
             //grabs song[variable] id
             int soundId = res.getIdentifier(songName + modifier, "raw", context.getPackageName());
-            songs.add(MediaPlayer.create(current, soundId)); //adds to ArrayList
+            songs.add(i, MediaPlayer.create(current, soundId)); //adds to ArrayList
         }
     }
 }
