@@ -12,6 +12,7 @@ public class RadioMenu extends AppCompatActivity {
 
     private Button mPlayButton;
     private static MediaPlayer mp;
+    public int currentTrack = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +24,23 @@ public class RadioMenu extends AppCompatActivity {
                 R.raw.song12, R.raw.song13, R.raw.song14, R.raw.song15, R.raw.song16, R.raw.song17,
                 R.raw.song18, R.raw.song19, R.raw.song20};
 
-                mPlayButton = (Button) findViewById(R.id.play_button);
+        mPlayButton = (Button) findViewById(R.id.play_button);
 
         mPlayButton.setText(R.string.play_button);
 
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+
                 while(true)
                 {
-                    mp = MediaPlayer.create(getApplicationContext(), GNRSongs[0]);
-                    mp.start();
+                    if(!mp.isPlaying())
+                    {
+                        mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+                        mp.start();
+                        currentTrack++;
+                    }
                 }
 
             }
