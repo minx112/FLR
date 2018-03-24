@@ -13,6 +13,8 @@ public class RadioMenu extends AppCompatActivity {
     private Button mPlayButton;
     private static MediaPlayer mp;
     public int currentTrack = 0;
+    public int currentStory = 0;
+    public int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +36,24 @@ public class RadioMenu extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+                currentTrack = 0;
+                mp = MediaPlayer.create(getApplicationContext(), GNRNews[currentTrack]);
+                mp.start();
 
                 while(true)
                 {
                     if(!mp.isPlaying())
                     {
-                        mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+                        if(flag == 2){
+                            mp = MediaPlayer.create(getApplicationContext(), GNRNews[currentStory]);
+                            currentStory++;
+                        }
+                        else {
+                            mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+                            currentTrack++;
+                        }
                         mp.start();
-                        currentTrack++;
+                        flag = (flag+1)%3;
                     }
                 }
 
