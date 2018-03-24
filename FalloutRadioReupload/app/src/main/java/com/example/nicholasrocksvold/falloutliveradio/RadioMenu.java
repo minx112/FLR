@@ -36,10 +36,8 @@ public class RadioMenu extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentTrack = 0;
-                mp = MediaPlayer.create(getApplicationContext(), GNRNews[currentTrack]);
-                mp.start();
 
+                mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
                 while(true)
                 {
                     if(!mp.isPlaying())
