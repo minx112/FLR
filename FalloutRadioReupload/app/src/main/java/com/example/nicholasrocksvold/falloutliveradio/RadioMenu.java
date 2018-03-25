@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
+import java.util.Random;
 
 public class RadioMenu extends AppCompatActivity {
 
@@ -37,18 +37,27 @@ public class RadioMenu extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
+                Random r = new Random();
+                int randSong = r.nextInt(GNRSongs.length);
+                int randNews = r.nextInt(GNRNews.length);
+
+                System.out.println("Initialized randSong: " + randSong);
+                System.out.println("Initialized randNews: " + randNews);
+
+                mp = MediaPlayer.create(getApplicationContext(), GNRSongs[randSong]);
                 while(true)
                 {
                     if(!mp.isPlaying())
                     {
                         if(flag == 2){
-                            mp = MediaPlayer.create(getApplicationContext(), GNRNews[currentStory]);
-                            currentStory++;
+                            mp = MediaPlayer.create(getApplicationContext(), GNRNews[randNews]);
+                            randNews = r.nextInt(GNRNews.length);
+                            System.out.println("Next randNews: " + randNews);
                         }
                         else {
-                            mp = MediaPlayer.create(getApplicationContext(), GNRSongs[currentTrack]);
-                            currentTrack++;
+                            mp = MediaPlayer.create(getApplicationContext(), GNRSongs[randSong]);
+                            randSong = r.nextInt(GNRSongs.length);
+                            System.out.println("Next randSong: " + randSong);
                         }
                         mp.start();
                         flag = (flag+1)%3;
