@@ -12,8 +12,6 @@ public class RadioMenu extends AppCompatActivity {
 
     private Button mPlayButton;
     private static MediaPlayer mp;
-    public int currentTrack = 0;
-    public int currentStory = 0;
     public int flag = 0;
 
     @Override
@@ -41,9 +39,6 @@ public class RadioMenu extends AppCompatActivity {
                 int randSong = r.nextInt(GNRSongs.length);
                 int randNews = r.nextInt(GNRNews.length);
 
-                System.out.println("Initialized randSong: " + randSong);
-                System.out.println("Initialized randNews: " + randNews);
-
                 mp = MediaPlayer.create(getApplicationContext(), GNRSongs[randSong]);
                 while(true)
                 {
@@ -52,12 +47,10 @@ public class RadioMenu extends AppCompatActivity {
                         if(flag == 2){
                             mp = MediaPlayer.create(getApplicationContext(), GNRNews[randNews]);
                             randNews = r.nextInt(GNRNews.length);
-                            System.out.println("Next randNews: " + randNews);
                         }
                         else {
                             mp = MediaPlayer.create(getApplicationContext(), GNRSongs[randSong]);
                             randSong = r.nextInt(GNRSongs.length);
-                            System.out.println("Next randSong: " + randSong);
                         }
                         mp.start();
                         flag = (flag+1)%3;
