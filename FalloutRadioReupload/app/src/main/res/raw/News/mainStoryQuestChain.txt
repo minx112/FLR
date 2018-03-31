@@ -1,0 +1,64 @@
+short = 3 hrs, medium = 6 hrs, long = 12 hrs
+
+onStart:
+---------
+first news is always "intro"
++ evergreenRaiders
++ forecast
++ grayditch
++ praiseBrotherhood
++ superhuman
++ talon
++ tenpennyTower
++ tensions
++ trees
+
+=============================
+Following In His Footsteps:
+-----------------------------
+- intro
++ escape
+--> Megaton[short] (end)
+
+====================
+Galaxy News Radio:
+-------------------
+- escape
++ followingInHisFootsteps
+--> Galaxy News Radio[Short] --> Museum Of Technology[Medium] --> Washington Monument[Short] --> Galaxy News Radio [Short] (end)
++ galaxyNewsRadio
+
+===================================
+Scientific Pursuits/Tranquil Lane:
+-----------------------------------
++ rivetCityStart
+--> Rivet City[Short] --> Jefferson Memorial[Medium] --> Vault 102[Long] (end)
+- followingInHisFootsteps
++ tranquilityLane
+
+====================
+The Waters Of Life:
+--------------------
+--> Rivet City[Short] --> Jefferson Memorial[Long] --> Citadel[Medium](End)
+- tranquilityLane
++ theWatersOfLife
+
+======================
+Picking Up The Trail:
+-----------------------
++ theGardenOfEdenSTART
+-->Little Lamplight[Medium] --> Vault 87[short](end)
+- theWatersOfLife
+- theGardenOfEdenSTART
++ theGardenOfEdenCOMPLETE
+Vault 87 -[1/4 travel time]-> Raven Rock[long] --> Citadel[short] (end)
+- theGardenOfEdenCOMPLETE
++ theAmericanDream
+
+==============
+Take It Back:
+--------------
++ resistEnclave
+--> Citadel[short] --> Jefferson Memorial[Long]
+- Everything
+On radio launch, play ending (no loop)
