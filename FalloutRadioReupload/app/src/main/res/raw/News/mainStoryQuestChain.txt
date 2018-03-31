@@ -51,7 +51,7 @@ Picking Up The Trail:
 - theWatersOfLife
 - theGardenOfEdenSTART
 + theGardenOfEdenCOMPLETE
-Vault 87 -[1/4 travel time]-> Raven Rock[long] --> Citadel[short] (end)
+Vault 87 --> Raven Rock[long] --> Citadel[long] (end) *longs are due to audio mentioning 'it's been 2 weeks since we last heard of 101'*
 - theGardenOfEdenCOMPLETE
 + theAmericanDream
 
