@@ -4,8 +4,8 @@
     <string name="play_button">Play Radio</string>
 
     <string-array name="soundNames">
-        <item>Billie Holliday - Crazy</item>   <!-- audio1 -->
-        <item>Billie Holliday - Easy</item>    <!-- audio2 -->
+        <item>Billie Holiday - Crazy</item>   <!-- audio1 -->
+        <item>Billie Holiday - Easy</item>    <!-- audio2 -->
         <item>Bob Crosby - Happy</item>        <!-- audio3 -->
         <item>Bob Crosby - Way</item>          <!-- audio4 -->
         <item>Cole Porter - Anything</item>    <!-- audio5 -->

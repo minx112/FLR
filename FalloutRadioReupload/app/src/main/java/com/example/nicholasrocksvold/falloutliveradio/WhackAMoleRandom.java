@@ -14,15 +14,12 @@ public class WhackAMoleRandom {
         Random rand = new Random();
         int decider = rand.nextInt(total);
 
-        int i = 0;
-        while(decider > 0)
+        int i = -1;
+        while(decider >= 0)
         {
+            i++;
             decider -= priority[i];
-            i++;
         }
-
-        if(priority[i] == 0)
-            i++;
 
         return i;
     }
@@ -55,6 +52,8 @@ public class WhackAMoleRandom {
                 priority[i] = 0;
             else
                 priority[i] += 1;
+
+            System.out.println("Priority at "+i+" is "+priority[i]);
         }
 
         return priority;
