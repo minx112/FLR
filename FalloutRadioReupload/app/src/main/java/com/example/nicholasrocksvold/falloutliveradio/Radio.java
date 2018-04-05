@@ -27,7 +27,7 @@ public class Radio {
     public ArrayList<Uri[]> newsStories = new ArrayList<>();
     public ArrayList<Integer> newsStoriesPriority = new ArrayList<>();
     private ArrayList<Uri[]> psaInfos = new ArrayList<>();
-    private int[] psaInfosPriority; //TODO: add all PSAs
+    private int[] psaInfosPriority;
 
     private Uri prevSong;
     private Uri nextSong;
@@ -135,7 +135,20 @@ public class Radio {
                     Uri.parse(uriPath+"radiation2"),
                     Uri.parse(uriPath+"radiation3")});
 
-            psaInfosPriority = new int[]{1,1,1};
+            psaInfos.add(new Uri[]{
+                    Uri.parse(uriPath+"raiders1"),
+                    Uri.parse(uriPath+"raiders2"),
+                    Uri.parse(uriPath+"raiders3"),
+                    Uri.parse(uriPath+"raiders4")});
+
+            psaInfos.add(new Uri[]{
+                    Uri.parse(uriPath+"weapons1"),
+                    Uri.parse(uriPath+"weapons2"),
+                    Uri.parse(uriPath+"weapons3")});
+
+            psaInfos.add(new Uri[]{Uri.parse(uriPath+"yaoguai")});
+
+            psaInfosPriority = new int[]{1,1,1,1,1,1};
         }
         else
             System.out.println("Input a correct radio name in code, please.");
