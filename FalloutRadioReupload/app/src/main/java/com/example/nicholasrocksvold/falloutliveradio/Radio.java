@@ -7,6 +7,12 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import java.util.Random;
 import java.util.ArrayList;
+import android.database.sqlite.SQLiteDatabase;
+import android.content.ContentValues;
+import com.example.nicholasrocksvold.falloutliveradio.QuestDB;
+import com.example.nicholasrocksvold.falloutliveradio.QuestDBHelper;
+
+
 
 public class Radio {
     Random r = new Random();
@@ -36,10 +42,16 @@ public class Radio {
     private int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
     String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
+    private Context mContext;
+    private SQLiteDatabase mDatabase;
+
     Radio(Context current, String radioName)
     {
         this.context = current;                     //sets context to main
         this.radioName = radioName; //establishes radio name
+
+        mContext = context.getApplicationContext();
+        mDatabase = new QuestDBHelper(mContext).getWritableDatabase();
 
         if(radioName.toUpperCase().matches("GNR")) {
 
@@ -373,4 +385,15 @@ public class Radio {
         playGNRNews(musicIntroAudio, flag);
     }
 
+    public void addDB(Quest q) {
+        ContentValues values = getContentValues(q);
+        mDatabase.insert(QuestDB.QuestTable.NAME, null, values);
+    }
+    private static ContentValues getContentValues(Quest quest) {
+        ContentValues values = new ContentValues();
+        values.put(QuestDB.QuestTable.Cols.timeClosed, Quest.timeClosed);
+        values.put(QuestDB.QuestTable.Cols.questsDone, Quest.questsDone);
+        values.put(QuestDB.QuestTable.Cols.currentQuestTime, Quest.currentQuestTime);
+        values.put(QuestDB.QuestTable.Cols.distances,Quest.distances);
+    }
 }

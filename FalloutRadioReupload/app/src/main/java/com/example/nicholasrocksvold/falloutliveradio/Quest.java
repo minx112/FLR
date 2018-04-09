@@ -11,64 +11,62 @@ import java.util.List;
  */
 
 public class Quest {
-    private Quest next;
-    private Quest prev;
-    //private Transmission transmission;
-    private Date date;
-    //private Quest unlock_quests;
-    private ArrayList<Integer> unlock_quests;
-    private int quest_number;
-
+    private Date timeClosed;
+    private ArrayList<Integer> questsDone;
+    private long currentQuestTime;
+    private ArrayList<Float> distances;
 
     public Quest() {
-        next = null;
-        prev = null;
+        timeClosed = new Date();
+        questsDone = new ArrayList<>();
+        currentQuestTime = 0;
+        distances = new ArrayList<>();
+    }
+
+    public Quest(Date tc, ArrayList<Integer> qd, long cqt, ArrayList<Float> d) {
+
         //transmission = new Transmission();
-        date = null;
-        //unlock_quests = new Quest();
-        unlock_quests = new ArrayList<>();
+        timeClosed = tc;
+        questsDone = qd;
+        currentQuestTime = cqt;
+        distances = d;
     }
 
-    public Quest(Date d, ArrayList uq, int qn) {
-        next = null;
-        prev = null;
-        //transmission = new Transmission();
-        date = d;
-        unlock_quests = uq;
-        quest_number = qn;
+    public void setDistances(ArrayList<Float> distances) {
+        this.distances = distances;
     }
 
-    public void setQuest_number(int quest_number) {
-        this.quest_number = quest_number;
+    public static ArrayList<Float> getDistances() {
+        return distances;
     }
 
-    public void setUnlock_quests(ArrayList<Integer> unlock_quests) {
+    public long getCurrentQuestTime() {
 
-        this.unlock_quests = unlock_quests;
+        return currentQuestTime;
     }
 
-    public void setDate(Date date) {
+    public ArrayList<Integer> getQuestsDone() {
 
-        this.date = date;
+        return questsDone;
     }
 
+    public Date getTimeClosed() {
 
-
-    public int getQuest_number() {
-
-        return quest_number;
+        return timeClosed;
     }
 
-    public ArrayList<Integer> getUnlock_quests() {
+    public void setCurrentQuestTime(long currentQuestTime) {
 
-        return unlock_quests;
+        this.currentQuestTime = currentQuestTime;
     }
 
-    public Date getDate() {
+    public void setQuestsDone(ArrayList<Integer> questsDone) {
 
-        return date;
+        this.questsDone = questsDone;
     }
 
+    public void setTimeClosed(Date timeClosed) {
 
-
+        this.timeClosed = timeClosed;
+    }
 }

@@ -11,6 +11,7 @@ public class QuestDB {
     public static final class QuestTable {
         public static final String NAME = "quests";
         public static final class Cols {
+            //not sure iff all these have to be converted to strings
             public static final Date timeClosed = new Date();
             public static final ArrayList<Integer> questsDone = new ArrayList<>();
             public static final long currentQuestTime = 0;
