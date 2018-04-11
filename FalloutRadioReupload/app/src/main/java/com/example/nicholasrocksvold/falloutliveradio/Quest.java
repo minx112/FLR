@@ -9,6 +9,7 @@ import java.util.List;
 /**
  * Created by mitchelldennen on 3/28/18.
  */
+//still needs get and store all these values from radio class
 
 public class Quest {
     private Date timeClosed;
