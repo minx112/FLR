@@ -1,7 +1,6 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,28 +17,22 @@ public class Radio {
     Random r = new Random();
     private WhackAMoleRandom wamR = new WhackAMoleRandom();
 
-    private Uri[] radioSongs = new Uri[20];
-    private int[] radioSongsPriority;
+    private Song[] radioSongs = new Song[20];
     private Uri[] musicExtroSpecific;
     private Uri[] musicIntroSpecific;
     private Uri[] musicIntroGeneric = new Uri[2];
-    private Uri[] radioHello = new Uri[13];
-    private int[] radioHelloPriority;
-    private Uri[] newsLink = new Uri[6];
-    private int[] newsLinkPriority;
+    private Song[] radioHello = new Song[13];
+    private Song[] newsLink = new Song[6];
     private Uri[] newsPost;
-    private Uri[] psaIntro;
-    private int[] psaIntroPriority;
-    public ArrayList<Uri[]> newsStories = new ArrayList<>();
-    public ArrayList<Integer> newsStoriesPriority = new ArrayList<>();
-    private ArrayList<Uri[]> psaInfos = new ArrayList<>();
-    private int[] psaInfosPriority;
+    private Song[] psaIntro;
+    private ArrayList<Song[]> newsStories = new ArrayList<>();
+    private ArrayList<Song[]> psaInfos = new ArrayList<>();
 
-    private Uri prevSong;
-    private Uri nextSong;
-    public String radioName;
-    private Context context;
-    private int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
+    private static Uri prevSong;
+    private static Uri nextSong;
+    private String radioName;
+    public int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
+
     String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
     private Context mContext;
@@ -47,18 +40,13 @@ public class Radio {
 
     Radio(Context current, String radioName)
     {
-        this.context = current;                     //sets context to main
         this.radioName = radioName; //establishes radio name
-
-        mContext = context.getApplicationContext();
-        mDatabase = new QuestDBHelper(mContext).getWritableDatabase();
+        this.mContext = current;
 
         if(radioName.toUpperCase().matches("GNR")) {
 
             for(int i = 1; i < 21; i++)
-                radioSongs[i - 1] = Uri.parse(uriPath+"gnrsong"+i);
-
-            radioSongsPriority = new int[]{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+                radioSongs[i - 1] = new Song(Uri.parse(uriPath+"gnrsong"+i));
 
             musicExtroSpecific = new Uri[]{
                     Uri.parse(uriPath+"anything_goes_extro"),
@@ -92,75 +80,64 @@ public class Radio {
                 musicIntroGeneric[i - 1] = Uri.parse(uriPath+"intro_music"+i);
 
             for(int i = 1; i < 14; i++)
-                radioHello[i - 1] = Uri.parse(uriPath+"hello"+i);
-
-            radioHelloPriority = new int[]{1,1,1,1,1,1,1,1,1,1,1,1,1};
+                radioHello[i - 1] = new Song(Uri.parse(uriPath+"hello"+i));
 
             for(int i = 1; i < 7; i++)
-                newsLink[i - 1] = Uri.parse(uriPath+"news_link"+i);
+                newsLink[i - 1] = new Song(Uri.parse(uriPath+"news_link"+i));
 
-            newsLinkPriority = new int[]{1,1,1,1,1,1};
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"evergreen_raiders1")),
+                    new Song(Uri.parse(uriPath+"evergreen_raiders2"))});
 
-            newsStories.add(new Uri[]{
-                    Uri.parse(uriPath+"evergreen_raiders1"),
-                    Uri.parse(uriPath+"evergreen_raiders2")});
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"escape1")),
+                    new Song(Uri.parse(uriPath+"escape2")),
+                    new Song(Uri.parse(uriPath+"escape3"))});
 
-            newsStories.add(new Uri[]{
-                    Uri.parse(uriPath+"escape1"),
-                    Uri.parse(uriPath+"escape2"),
-                    Uri.parse(uriPath+"escape3")});
-
-            newsStories.add(new Uri[]{
-                    Uri.parse(uriPath+"forecast")});
-
-            for(int i = 0; i < newsStories.size(); i++)
-                newsStoriesPriority.add(i, 1);
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"forecast"))});
 
             newsPost = new Uri[]{
                     Uri.parse(uriPath+"post_generic1"),
                     Uri.parse(uriPath+"post_generic2")};
 
-            psaIntro = new Uri[]{
-                    Uri.parse(uriPath+"psa_intro1"),
-                    Uri.parse(uriPath+"psa_intro2"),
-                    Uri.parse(uriPath+"psa_intro3"),
-                    Uri.parse(uriPath+"psa_intro4")};
+            psaIntro = new Song[]{
+                    new Song(Uri.parse(uriPath+"psa_intro1")),
+                    new Song(Uri.parse(uriPath+"psa_intro2")),
+                    new Song(Uri.parse(uriPath+"psa_intro3")),
+                    new Song(Uri.parse(uriPath+"psa_intro4"))};
 
-            psaIntroPriority = new int[]{1,1,1,1};
+            psaInfos.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"ghouls1")),
+                    new Song(Uri.parse(uriPath+"ghouls2")),
+                    new Song(Uri.parse(uriPath+"ghouls3")),
+                    new Song(Uri.parse(uriPath+"ghouls4")),
+                    new Song(Uri.parse(uriPath+"ghouls5")),
+                    new Song(Uri.parse(uriPath+"ghouls6"))});
 
-            psaInfos.add(new Uri[]{
-                    Uri.parse(uriPath+"ghouls1"),
-                    Uri.parse(uriPath+"ghouls2"),
-                    Uri.parse(uriPath+"ghouls3"),
-                    Uri.parse(uriPath+"ghouls4"),
-                    Uri.parse(uriPath+"ghouls5"),
-                    Uri.parse(uriPath+"ghouls6")});
+            psaInfos.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"mutants1")),
+                    new Song(Uri.parse(uriPath+"mutants2")),
+                    new Song(Uri.parse(uriPath+"mutants3")),
+                    new Song(Uri.parse(uriPath+"mutants4"))});
 
-            psaInfos.add(new Uri[]{
-                    Uri.parse(uriPath+"mutants1"),
-                    Uri.parse(uriPath+"mutants2"),
-                    Uri.parse(uriPath+"mutants3"),
-                    Uri.parse(uriPath+"mutants4")});
+            psaInfos.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"radiation1")),
+                    new Song(Uri.parse(uriPath+"radiation2")),
+                    new Song(Uri.parse(uriPath+"radiation3"))});
 
-            psaInfos.add(new Uri[]{
-                    Uri.parse(uriPath+"radiation1"),
-                    Uri.parse(uriPath+"radiation2"),
-                    Uri.parse(uriPath+"radiation3")});
+            psaInfos.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"raiders1")),
+                    new Song(Uri.parse(uriPath+"raiders2")),
+                    new Song(Uri.parse(uriPath+"raiders3")),
+                    new Song(Uri.parse(uriPath+"raiders4"))});
 
-            psaInfos.add(new Uri[]{
-                    Uri.parse(uriPath+"raiders1"),
-                    Uri.parse(uriPath+"raiders2"),
-                    Uri.parse(uriPath+"raiders3"),
-                    Uri.parse(uriPath+"raiders4")});
+            psaInfos.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"weapons1")),
+                    new Song(Uri.parse(uriPath+"weapons2")),
+                    new Song(Uri.parse(uriPath+"weapons3"))});
 
-            psaInfos.add(new Uri[]{
-                    Uri.parse(uriPath+"weapons1"),
-                    Uri.parse(uriPath+"weapons2"),
-                    Uri.parse(uriPath+"weapons3")});
-
-            psaInfos.add(new Uri[]{Uri.parse(uriPath+"yaoguai")});
-
-            psaInfosPriority = new int[]{1,1,1,1,1,1};
+            psaInfos.add(new Song[]{new Song(Uri.parse(uriPath+"yaoguai"))});
         }
         else
             System.out.println("Input a correct radio name in code, please.");
@@ -174,16 +151,16 @@ public class Radio {
         mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         try {
-            mp.setDataSource(context, audio);
+            mp.setDataSource(mContext, audio);
             mp.prepare();
             mp.start();
 
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
-                    int chosenSong = wamR.WAMR(radioSongsPriority);
+                    int chosenSong = wamR.WAMR(radioSongs);
                     prevSong = nextSong;
-                    nextSong = radioSongs[chosenSong];
-                    radioSongsPriority = wamR.alterPriority(radioSongsPriority, chosenSong);
+                    nextSong = radioSongs[chosenSong].getSong();
+                    wamR.alterPriority(radioSongs, chosenSong);
 
                     if (flag == 2)
                         playGNRNews(nextSong, 0);
@@ -203,14 +180,14 @@ public class Radio {
 
         if(flag == 0)
         {
-            int chosenSong = wamR.WAMR(radioSongsPriority);
+            int chosenSong = wamR.WAMR(radioSongs);
             prevSong = nextSong;
-            nextSong = radioSongs[chosenSong];
-            radioSongsPriority = wamR.alterPriority(radioSongsPriority, chosenSong);
+            nextSong = radioSongs[chosenSong].getSong();
+            wamR.alterPriority(radioSongs, chosenSong);
         }
 
         try {
-            mp.setDataSource(context, audio);
+            mp.setDataSource(mContext, audio);
             mp.prepare();
             mp.start();
 
@@ -271,10 +248,10 @@ public class Radio {
         else if(prevSong.equals(Uri.parse(uriPath+"gnrsong20")))
             musicExtroAudio = musicExtroSpecific[10];
         else {
-            int chosen = wamR.WAMR(radioHelloPriority);
+            int chosen = wamR.WAMR(radioHello);
 
-            radioHelloPriority = wamR.alterPriority(radioHelloPriority, chosen);
-            musicExtroAudio = radioHello[chosen];
+            wamR.alterPriority(radioHello, chosen);
+            musicExtroAudio = radioHello[chosen].getSong();
         }
 
         playGNRNews(musicExtroAudio, flag);
@@ -283,24 +260,24 @@ public class Radio {
     private void newsLink(int flag)
     {
         flag++;
-        int chosen = wamR.WAMR(newsLinkPriority);
-        newsLinkPriority = wamR.alterPriority(newsLinkPriority, chosen);
+        int chosen = wamR.WAMR(newsLink);
+        wamR.alterPriority(newsLink, chosen);
 
-        playGNRNews(newsLink[chosen], flag);
+        playGNRNews(newsLink[chosen].getSong(), flag);
     }
 
     private void newsStory(int flag)
     {
         if(lastPlayed[2] == 0) {
-            int chosen = wamR.WAMR(newsStoriesPriority);
-            newsStoriesPriority = wamR.alterPriority(newsStoriesPriority, chosen);
+            int chosen = wamR.WAMR(newsStories);
+            wamR.alterPriority(newsStories, chosen);
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
-            lastPlayed[2] = newsStories.get(lastPlayed[0]).length;
+            lastPlayed[2] = newsStories.get(lastPlayed[0]).length-1;
             lastPlayed[3]++;
         }
 
-        Uri newsStoryAudio = newsStories.get(lastPlayed[0])[lastPlayed[1]];
+        Uri newsStoryAudio = newsStories.get(lastPlayed[0])[lastPlayed[1]].getSong();
         lastPlayed[1]++;
 
         if(lastPlayed[1] == lastPlayed[2]) {
@@ -321,24 +298,24 @@ public class Radio {
     private void psaIntro(int flag)
     {
         flag++;
-        int chosen = wamR.WAMR(psaIntroPriority);
-        psaIntroPriority = wamR.alterPriority(psaIntroPriority, chosen);
+        int chosen = wamR.WAMR(psaIntro);
+        wamR.alterPriority(psaIntro, chosen);
 
-        playGNRNews(psaIntro[chosen], flag);
+        playGNRNews(psaIntro[chosen].getSong(), flag);
     }
 
     private void psaInfo(int flag)
     {
         if(lastPlayed[2] == 0) {
-            int chosen = wamR.WAMR(psaInfosPriority);
-            psaInfosPriority = wamR.alterPriority(psaInfosPriority, chosen);
+            int chosen = wamR.WAMR(psaInfos);
+            wamR.alterPriority(psaInfos, chosen);
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
-            lastPlayed[2] = psaInfos.get(lastPlayed[0]).length;
+            lastPlayed[2] = psaInfos.get(lastPlayed[0]).length-1;
             lastPlayed[3]++;
         }
 
-        Uri psaInfoAudio = psaInfos.get(lastPlayed[0])[lastPlayed[1]];
+        Uri psaInfoAudio = psaInfos.get(lastPlayed[0])[lastPlayed[1]].getSong();
         lastPlayed[1]++;
 
         if(lastPlayed[1] == lastPlayed[2]) {
@@ -384,7 +361,7 @@ public class Radio {
 
         playGNRNews(musicIntroAudio, flag);
     }
-
+/*
     public void addDB(Quest q) {
         ContentValues values = getContentValues(q);
         mDatabase.insert(QuestDB.QuestTable.NAME, null, values);
@@ -396,4 +373,5 @@ public class Radio {
         values.put(QuestDB.QuestTable.Cols.currentQuestTime, Quest.currentQuestTime);
         values.put(QuestDB.QuestTable.Cols.distances,Quest.distances);
     }
+*/
 }

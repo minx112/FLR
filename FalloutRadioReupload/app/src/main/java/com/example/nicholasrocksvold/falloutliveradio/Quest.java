@@ -15,7 +15,7 @@ public class Quest {
     private Date timeClosed;
     private ArrayList<Integer> questsDone;
     private long currentQuestTime;
-    private ArrayList<Float> distances;
+    private static ArrayList<Float> distances;
 
     public Quest() {
         timeClosed = new Date();

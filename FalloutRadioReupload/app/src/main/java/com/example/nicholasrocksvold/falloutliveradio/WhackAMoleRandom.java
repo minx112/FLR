@@ -4,12 +4,12 @@ import java.util.Random;
 
 public class WhackAMoleRandom {
 
-    public int WAMR(int[] priority)
+    public int WAMR(Song[] priority)
     {
         int total = 0;
 
         for(int i = 0; i < priority.length; i++)
-            total += priority[i];
+            total += priority[i].getPriority();
 
         Random rand = new Random();
         int decider = rand.nextInt(total);
@@ -18,18 +18,18 @@ public class WhackAMoleRandom {
         while(decider >= 0)
         {
             i++;
-            decider -= priority[i];
+            decider -= priority[i].getPriority();
         }
 
         return i;
     }
 
-    public int WAMR(ArrayList<Integer> priority)
+    public int WAMR(ArrayList<Song[]> priority)
     {
         int total = 0;
 
         for(int i = 0; i < priority.size(); i++)
-            total += priority.get(i);
+            total += priority.get(i)[0].getPriority();
 
         Random rand = new Random();
         int decider = rand.nextInt(total);
@@ -37,38 +37,34 @@ public class WhackAMoleRandom {
         int i = 0;
         while(decider > 0)
         {
-            decider -= priority.get(i);
+            decider -= priority.get(i)[0].getPriority();
             i++;
         }
 
         return i;
     }
 
-    public int[] alterPriority(int[] priority, int chosen)
+    public void alterPriority(Song[] priority, int chosen)
     {
         for(int i = 0; i < priority.length; i++)
         {
             if(i == chosen)
-                priority[i] = 0;
+                priority[i].setPriority(0);
             else
-                priority[i] += 1;
+                priority[i].setPriority(priority[i].getPriority()+1);
 
             System.out.println("Priority at "+i+" is "+priority[i]);
         }
-
-        return priority;
     }
 
-    public ArrayList<Integer> alterPriority(ArrayList<Integer> priority, int chosen)
+    public void alterPriority(ArrayList<Song[]> priority, int chosen)
     {
         for(int i = 0; i < priority.size(); i++)
         {
             if(i == chosen)
-                priority.set(i, 0);
+                priority.get(i)[0].setPriority(0);
             else
-                priority.set(i, priority.get(i) + 1);
+                priority.get(i)[0].setPriority(priority.get(i)[0].getPriority()+1);
         }
-
-        return priority;
     }
 }
