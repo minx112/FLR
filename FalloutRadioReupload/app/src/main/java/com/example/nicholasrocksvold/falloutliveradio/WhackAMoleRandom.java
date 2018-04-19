@@ -28,7 +28,7 @@ public class WhackAMoleRandom {
     {
         int total = 0;
 
-        for(int i = 0; i < priority.size(); i++)
+        for(int i = 0; i < priority.size()-1; i++)
             total += priority.get(i)[0].getPriority();
 
         Random rand = new Random();
@@ -57,7 +57,7 @@ public class WhackAMoleRandom {
 
     public void alterPriority(ArrayList<Song[]> priority, int chosen)
     {
-        for(int i = 0; i < priority.size(); i++)
+        for(int i = 0; i < priority.size()-1; i++)
         {
             if(i == chosen)
                 priority.get(i)[0].setPriority(0);
