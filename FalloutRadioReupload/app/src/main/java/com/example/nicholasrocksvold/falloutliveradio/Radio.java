@@ -30,7 +30,10 @@ public class Radio {
 
     private static Uri prevSong;
     private static Uri nextSong;
+    private static Uri audio;
     private String radioName;
+    private long startTime;
+    private static int flag;
     private int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
 
     String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
@@ -42,6 +45,7 @@ public class Radio {
     {
         this.radioName = radioName; //establishes radio name
         this.mContext = current;
+        this.startTime =  System.currentTimeMillis();
 
         if(radioName.toUpperCase().matches("GNR")) {
 
@@ -143,89 +147,125 @@ public class Radio {
             System.out.println("Input a correct radio name in code, please.");
     }
 
-    public void playRadio(final Uri audio, int passedFlag)
+    public void playRadio(MediaPlayer mp)
     {
-        final int flag = passedFlag + 1;
-
-        MediaPlayer mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
+        nextSong =  Uri.parse("android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/radio_start");//start static
         try {
-            mp.setDataSource(mContext, audio);
+            mp.setDataSource(mContext, nextSong);
             mp.prepare();
             mp.start();
 
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                public void onCompletion(MediaPlayer mp) {
-                    int chosenSong = wamR.WAMR(radioSongs);
-                    prevSong = nextSong;
-                    nextSong = radioSongs[chosenSong].getSong();
-                    wamR.alterPriority(radioSongs, chosenSong);
-
-                    if (flag == 2)
-                        playGNRNews(nextSong, 0);
-                    else
-                        playRadio(nextSong, flag);
-
-                    mp.release();
-                }
-            });
+            setSong();
         }catch(java.io.IOException e){
-            System.out.println("Playing song error: (Uri)"+nextSong);
-        }
-    }
-
-    private void playGNRNews(Uri audio, final int flag)
-    {
-        MediaPlayer mp = new MediaPlayer();
-        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-        if(flag == 0)
-        {
-            int chosenSong = wamR.WAMR(radioSongs);
-            prevSong = nextSong;
-            nextSong = radioSongs[chosenSong].getSong();
-            wamR.alterPriority(radioSongs, chosenSong);
+            System.out.println("Playing song error");
         }
 
-        try {
-            mp.setDataSource(mContext, audio);
-            mp.prepare();
-            mp.start();
+        //if(wanderer.isNotDone())
+        while(true) {
+            startTime = System.currentTimeMillis(); //fetch starting time
+            //play music for 5 minutes
+            while ((System.currentTimeMillis() - startTime) < 300000) {
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+                        try {
+                            mp.reset();
+                            mp.setDataSource(mContext, nextSong);
+                            mp.prepare();
+                            mp.start();
 
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-
-                if(flag == 0)
-                    MusicExtro(flag);
-                else if(flag == 1)
-                    newsLink(flag);
-                else if(flag == 2 )
-                    newsStory(flag);
-                else if(flag == 3)
-                    newsPost(flag);
-                //TODO:Add possibility of radio theater
-                //TODO:Add possibility of karma news
-                else if(flag == 7)
-                    psaIntro(flag);
-                else if(flag == 8)
-                    psaInfo(flag);
-                else if(flag == 9)
-                    musicIntro(flag);
-                else
-                    playRadio(nextSong, 0);
-
-                mp.release();
+                            setSong();
+                        }catch(java.io.IOException e){
+                            System.out.println("Playing song error");
+                        }
+                    }
+                });
             }
-        });
-        }catch(java.io.IOException e){
-            System.out.println("Playing news error: (Uri)"+nextSong);
+            //play news
+            flag = 0;
+            while(flag != -1)
+            {
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    public void onCompletion(MediaPlayer mp) {
+
+                        if(flag == 0) //set music extro
+                        {
+                            flag++;
+                            audio = setMusicExtro();
+                        }
+
+                        try {
+                            mp.reset();
+                            mp.setDataSource(mContext, audio);
+                            mp.prepare();
+                            mp.start();
+                        }catch(java.io.IOException e){
+                            System.out.println("Playing news error at flag "+flag);
+                        }
+
+                        if(flag == 1)//set news link
+                        {
+                            flag++;
+                            audio = setNewsLink();
+                        }
+                        else if(flag == 2)//set news story
+                        {
+                            audio = setNewsStory();
+
+                            if(lastPlayed[1] == lastPlayed[2])//story is done
+                            {
+                                flag++;
+                                for (int i = 0; i < lastPlayed.length; i++)
+                                    lastPlayed[i] = 0;
+                            }
+                        }
+                        else if(flag == 3)//set news post
+                        {
+                            flag++;
+                            audio = setNewsPost();
+                        }
+                        else if(flag == 4)//set psa intro
+                        {
+                            flag++;
+                            audio = setPSAIntro();
+                        }
+                        else if(flag == 5)//set psa info
+                        {
+                            audio = setPSAInfo();
+
+                            if(lastPlayed[1] == lastPlayed[2])//PSA is done
+                            {
+                                flag++;
+                                for (int i = 0; i < lastPlayed.length; i++)
+                                    lastPlayed[i] = 0;
+                            }
+                        }
+                        else if(flag == 6)//set music intro
+                        {
+                            flag++;
+                            audio = setMusicIntro();
+                        }
+                        else
+                            flag = -1;//news is done
+                    }
+                });
+            }
         }
+                /*
+                else
+                    check wanderer karma and play ending
+                 */
     }
 
-    private void MusicExtro(int flag) {
+    private void setSong()
+    {
+        int chosenSong = wamR.WAMR(radioSongs);
+        prevSong = nextSong;
+        nextSong = radioSongs[chosenSong].getSong();
+        wamR.alterPriority(radioSongs, chosenSong);
+    }
+
+    public Uri setMusicExtro() {
         Uri musicExtroAudio;
-        flag++;
 
         if(prevSong.equals(Uri.parse(uriPath+"gnrsong1")))
             musicExtroAudio = musicExtroSpecific[3];
@@ -258,19 +298,18 @@ public class Radio {
             musicExtroAudio = radioHello[chosen].getSong();
         }
 
-        playGNRNews(musicExtroAudio, flag);
+        return musicExtroAudio;
     }
 
-    private void newsLink(int flag)
+    public Uri setNewsLink()
     {
-        flag++;
         int chosen = wamR.WAMR(newsLink);
         wamR.alterPriority(newsLink, chosen);
 
-        playGNRNews(newsLink[chosen].getSong(), flag);
+        return newsLink[chosen].getSong();
     }
 
-    private void newsStory(int flag)
+    public Uri setNewsStory()
     {
         if(lastPlayed[2] == 0) {
             int chosen = wamR.WAMR(newsStories);
@@ -284,31 +323,23 @@ public class Radio {
         Uri newsStoryAudio = newsStories.get(lastPlayed[0])[lastPlayed[1]].getSong();
         lastPlayed[1]++;
 
-        if(lastPlayed[1] == lastPlayed[2]) {
-            flag++;
-            for (int i = 0; i < lastPlayed.length; i++)
-                lastPlayed[i] = 0;
-        }
-
-        playGNRNews(newsStoryAudio,flag);
+        return newsStoryAudio;
     }
 
-    private void newsPost(int flag)
+    public Uri setNewsPost()
     {
-        flag += 4; //jump to psaIntro
-        playGNRNews(newsPost[r.nextInt(newsPost.length)], flag);
+        return newsPost[r.nextInt(newsPost.length)];
     }
 
-    private void psaIntro(int flag)
+    public Uri setPSAIntro()
     {
-        flag++;
         int chosen = wamR.WAMR(psaIntro);
         wamR.alterPriority(psaIntro, chosen);
 
-        playGNRNews(psaIntro[chosen].getSong(), flag);
+        return psaIntro[chosen].getSong();
     }
 
-    private void psaInfo(int flag)
+    public Uri setPSAInfo()
     {
         if(lastPlayed[2] == 0) {
             int chosen = wamR.WAMR(psaInfos);
@@ -322,19 +353,12 @@ public class Radio {
         Uri psaInfoAudio = psaInfos.get(lastPlayed[0])[lastPlayed[1]].getSong();
         lastPlayed[1]++;
 
-        if(lastPlayed[1] == lastPlayed[2]) {
-            flag++;
-            for (int i = 0; i < lastPlayed.length; i++)
-                lastPlayed[i] = 0;
-        }
-
-        playGNRNews(psaInfoAudio,flag);
+        return psaInfoAudio;
     }
 
-    private void musicIntro(int flag)
+    public Uri setMusicIntro()
     {
         Uri musicIntroAudio;
-        flag++;
 
         if(nextSong.equals(Uri.parse(uriPath+"gnrsong1")))
             musicIntroAudio = musicIntroSpecific[3];
@@ -363,7 +387,7 @@ public class Radio {
         else
             musicIntroAudio = musicIntroGeneric[r.nextInt(musicIntroGeneric.length)];
 
-        playGNRNews(musicIntroAudio, flag);
+        return musicIntroAudio;
     }
 /*
     public void addDB(Quest q) {
