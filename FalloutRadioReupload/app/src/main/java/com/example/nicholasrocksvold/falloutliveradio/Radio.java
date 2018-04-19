@@ -31,7 +31,7 @@ public class Radio {
     private static Uri prevSong;
     private static Uri nextSong;
     private String radioName;
-    public int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
+    private int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
 
     String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
@@ -166,6 +166,8 @@ public class Radio {
                         playGNRNews(nextSong, 0);
                     else
                         playRadio(nextSong, flag);
+
+                    mp.release();
                 }
             });
         }catch(java.io.IOException e){
@@ -212,6 +214,8 @@ public class Radio {
                     musicIntro(flag);
                 else
                     playRadio(nextSong, 0);
+
+                mp.release();
             }
         });
         }catch(java.io.IOException e){
@@ -273,7 +277,7 @@ public class Radio {
             wamR.alterPriority(newsStories, chosen);
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
-            lastPlayed[2] = newsStories.get(lastPlayed[0]).length-1;
+            lastPlayed[2] = newsStories.get(lastPlayed[0]).length;
             lastPlayed[3]++;
         }
 
@@ -311,7 +315,7 @@ public class Radio {
             wamR.alterPriority(psaInfos, chosen);
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
-            lastPlayed[2] = psaInfos.get(lastPlayed[0]).length-1;
+            lastPlayed[2] = psaInfos.get(lastPlayed[0]).length;
             lastPlayed[3]++;
         }
 

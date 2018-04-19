@@ -52,8 +52,6 @@ public class WhackAMoleRandom {
                 priority[i].setPriority(0);
             else
                 priority[i].setPriority(priority[i].getPriority()+1);
-
-            System.out.println("Priority at "+i+" is "+priority[i]);
         }
     }
 
