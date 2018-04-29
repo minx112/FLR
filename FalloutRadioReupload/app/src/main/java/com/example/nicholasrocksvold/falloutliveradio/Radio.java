@@ -27,6 +27,7 @@ public class Radio {
     private Song[] psaIntro;
     private ArrayList<Song[]> newsStories = new ArrayList<>();
     private ArrayList<Song[]> psaInfos = new ArrayList<>();
+    private ArrayList<Uri[]> radioTheater = new ArrayList<>();
 
     private static Uri prevSong;
     private static Uri nextSong;
@@ -34,7 +35,8 @@ public class Radio {
     private String radioName;
     private long startTime;
     private static int flag;
-    private int[] lastPlayed = new int[]{0,0,0,0}; //0=story, 1=track, 2=maxTrack, 3=middle of story
+    private int[] lastPlayed = new int[]{0,0,0}; //0=story, 1=track, 2=maxTrack
+    private int[] theaterSequence = new int[]{0,-1,0}; //0=part, 1=track, 2=maxTrack
 
     String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
@@ -142,6 +144,56 @@ public class Radio {
                     new Song(Uri.parse(uriPath+"weapons3"))});
 
             psaInfos.add(new Song[]{new Song(Uri.parse(uriPath+"yaoguai"))});
+
+            radioTheater.add(new Uri[]{
+                    Uri.parse(uriPath+"part1_1"), Uri.parse(uriPath+"part1_2"),
+                    Uri.parse(uriPath+"part1_3"), Uri.parse(uriPath+"part1_4"),
+                    Uri.parse(uriPath+"part1_5"), Uri.parse(uriPath+"part1_6"),
+                    Uri.parse(uriPath+"part1_7"), Uri.parse(uriPath+"part1_8"),
+                    Uri.parse(uriPath+"part1_9"), Uri.parse(uriPath+"part1_10"),
+                    Uri.parse(uriPath+"part1_11"), Uri.parse(uriPath+"part1_12"),
+                    Uri.parse(uriPath+"part1_13"), Uri.parse(uriPath+"part1_14"),
+                    Uri.parse(uriPath+"part1_15"), Uri.parse(uriPath+"part1_16"),
+                    Uri.parse(uriPath+"part1_17"), Uri.parse(uriPath+"part1_18"),
+                    Uri.parse(uriPath+"part1_19"), Uri.parse(uriPath+"part1_20")});
+
+            radioTheater.add(new Uri[]{
+                    Uri.parse(uriPath+"part2_1"), Uri.parse(uriPath+"part2_2"),
+                    Uri.parse(uriPath+"part2_3"), Uri.parse(uriPath+"part2_4"),
+                    Uri.parse(uriPath+"part2_5"), Uri.parse(uriPath+"part2_6"),
+                    Uri.parse(uriPath+"part2_7"), Uri.parse(uriPath+"part2_8"),
+                    Uri.parse(uriPath+"part2_9"), Uri.parse(uriPath+"part2_10"),
+                    Uri.parse(uriPath+"part2_11"), Uri.parse(uriPath+"part2_12"),
+                    Uri.parse(uriPath+"part2_13"), Uri.parse(uriPath+"part2_14"),
+                    Uri.parse(uriPath+"part2_15"), Uri.parse(uriPath+"part2_16"),
+                    Uri.parse(uriPath+"part2_17"), Uri.parse(uriPath+"part2_18"),
+                    Uri.parse(uriPath+"part2_19"), Uri.parse(uriPath+"part2_20"),
+                    Uri.parse(uriPath+"part2_21"), Uri.parse(uriPath+"part2_22"),
+                    Uri.parse(uriPath+"part2_23"), Uri.parse(uriPath+"part2_24")});
+
+            radioTheater.add(new Uri[]{
+                    Uri.parse(uriPath+"part3_1"), Uri.parse(uriPath+"part3_2"),
+                    Uri.parse(uriPath+"part3_3"), Uri.parse(uriPath+"part3_4"),
+                    Uri.parse(uriPath+"part3_5"), Uri.parse(uriPath+"part3_6"),
+                    Uri.parse(uriPath+"part3_7"), Uri.parse(uriPath+"part3_8"),
+                    Uri.parse(uriPath+"part3_9"), Uri.parse(uriPath+"part3_10"),
+                    Uri.parse(uriPath+"part3_11"), Uri.parse(uriPath+"part3_12"),
+                    Uri.parse(uriPath+"part3_13"), Uri.parse(uriPath+"part3_14"),
+                    Uri.parse(uriPath+"part3_15"), Uri.parse(uriPath+"part3_16"),
+                    Uri.parse(uriPath+"part3_17"), Uri.parse(uriPath+"part3_18")});
+
+            radioTheater.add(new Uri[]{
+                    Uri.parse(uriPath+"part4_1"), Uri.parse(uriPath+"part4_2"),
+                    Uri.parse(uriPath+"part4_3"), Uri.parse(uriPath+"part4_4"),
+                    Uri.parse(uriPath+"part4_5"), Uri.parse(uriPath+"part4_6"),
+                    Uri.parse(uriPath+"part4_7"), Uri.parse(uriPath+"part4_8"),
+                    Uri.parse(uriPath+"part4_9"), Uri.parse(uriPath+"part4_10"),
+                    Uri.parse(uriPath+"part4_11"), Uri.parse(uriPath+"part4_12"),
+                    Uri.parse(uriPath+"part4_13"), Uri.parse(uriPath+"part4_14"),
+                    Uri.parse(uriPath+"part4_15"), Uri.parse(uriPath+"part4_16"),
+                    Uri.parse(uriPath+"part4_17"), Uri.parse(uriPath+"part4_18"),
+                    Uri.parse(uriPath+"part4_19"), Uri.parse(uriPath+"part4_20"),
+                    Uri.parse(uriPath+"part4_21")});
         }
         else
             System.out.println("Input a correct radio name in code, please.");
@@ -180,16 +232,30 @@ public class Radio {
                     }
                 });
             }
-            //play news
+            /*play news
+            -1 = break news
+            0 = music extro
+            1 = theater
+            2 = news link
+            3 = news story
+            4 = news post
+            5 = psa intro
+            6 = psa
+            7 = music intro
+            */
             flag = 0;
             while(flag != -1)
             {
+                System.out.println("Flag: "+flag);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     public void onCompletion(MediaPlayer mp) {
 
                         if(flag == 0) //set music extro
                         {
-                            flag++;
+                            if(r.nextInt(100) < 75)
+                                flag += 2; //play news
+                            else
+                                flag++;
                             audio = setMusicExtro();
                         }
 
@@ -201,13 +267,28 @@ public class Radio {
                         }catch(java.io.IOException e){
                             System.out.println("Playing news error at flag "+flag);
                         }
-
-                        if(flag == 1)//set news link
+                        if(flag == 1)//set theater
+                        {
+                            if(theaterSequence[1] < theaterSequence[2])
+                                audio = setTheater();
+                            else //theater is done
+                            {
+                                audio = Uri.parse(uriPath + "theater_outro");
+                                flag = 7; //jump to music extro
+                                if (theaterSequence[0] == 3) //ready next theater story
+                                    theaterSequence[0] = 0;
+                                else
+                                    theaterSequence[0]++;
+                                theaterSequence[1] = -1; //reset rest of array
+                                theaterSequence[2] = 0;
+                            }
+                        }
+                        else if(flag == 2)//set news link
                         {
                             flag++;
                             audio = setNewsLink();
                         }
-                        else if(flag == 2)//set news story
+                        else if(flag == 3)//set news story
                         {
                             audio = setNewsStory();
 
@@ -218,17 +299,17 @@ public class Radio {
                                     lastPlayed[i] = 0;
                             }
                         }
-                        else if(flag == 3)//set news post
+                        else if(flag == 4)//set news post
                         {
                             flag++;
                             audio = setNewsPost();
                         }
-                        else if(flag == 4)//set psa intro
+                        else if(flag == 5)//set psa intro
                         {
                             flag++;
                             audio = setPSAIntro();
                         }
-                        else if(flag == 5)//set psa info
+                        else if(flag == 6)//set psa info
                         {
                             audio = setPSAInfo();
 
@@ -239,7 +320,7 @@ public class Radio {
                                     lastPlayed[i] = 0;
                             }
                         }
-                        else if(flag == 6)//set music intro
+                        else if(flag == 7)//set music intro
                         {
                             flag++;
                             audio = setMusicIntro();
@@ -301,6 +382,22 @@ public class Radio {
         return musicExtroAudio;
     }
 
+    private Uri setTheater()
+    {
+        Uri theaterAudio;
+        if(theaterSequence[2] == 0) {
+            theaterAudio = Uri.parse(uriPath+"theater_intro");
+            theaterSequence[1] = 0;
+            theaterSequence[2] = radioTheater.get(theaterSequence[0]).length;
+        }
+        else {
+            theaterAudio = radioTheater.get(theaterSequence[0])[theaterSequence[1]];
+            theaterSequence[1]++;
+        }
+
+        return theaterAudio;
+    }
+
     public Uri setNewsLink()
     {
         int chosen = wamR.WAMR(newsLink);
@@ -317,7 +414,6 @@ public class Radio {
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
             lastPlayed[2] = newsStories.get(lastPlayed[0]).length;
-            lastPlayed[3]++;
         }
 
         Uri newsStoryAudio = newsStories.get(lastPlayed[0])[lastPlayed[1]].getSong();
@@ -347,7 +443,6 @@ public class Radio {
             lastPlayed[0] = chosen;
             lastPlayed[1] = 0;
             lastPlayed[2] = psaInfos.get(lastPlayed[0]).length;
-            lastPlayed[3]++;
         }
 
         Uri psaInfoAudio = psaInfos.get(lastPlayed[0])[lastPlayed[1]].getSong();
