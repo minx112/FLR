@@ -32,6 +32,7 @@ public class Radio {
     private Calendar currentTime;
     private long timeModifier;
     private Calendar timeFlag;
+    private int onTheFifteen;
     private static int flag;
     private int[] lastPlayed = new int[]{0,0,0}; //0=story, 1=track, 2=maxTrack
     private int[] theaterSequence = new int[]{0,-1,0}; //0=part, 1=track, 2=maxTrack
@@ -54,21 +55,25 @@ public class Radio {
         if(currentTime.get(Calendar.MINUTE) <= 15) //less than xx:15:xx
         {
             System.out.println("less than 15");
+            onTheFifteen = 15;
             this.timeFlag.set(Calendar.MINUTE, 15);
         }
         else if(currentTime.get(Calendar.MINUTE) <= 30) //less than xx:30:xx
         {
             System.out.println("less than 30");
+            onTheFifteen = 30;
             this.timeFlag.set(Calendar.MINUTE, 30);
         }
         else if(currentTime.get(Calendar.MINUTE) <= 45) //less than xx:45:xx
         {
             System.out.println("less than 45");
+            onTheFifteen = 45;
             this.timeFlag.set(Calendar.MINUTE, 45);
         }
         else //before xx:00:xx
         {
             System.out.println("less than 00");
+            onTheFifteen = 0;
             this.timeFlag.add(Calendar.HOUR_OF_DAY, 1);
             this.timeFlag.set(Calendar.MINUTE, 0);
         }
@@ -249,6 +254,7 @@ public class Radio {
 
             //play music until about the 15 of the hour is hit
             while (currentTime.before(this.timeFlag)) {
+                this.currentTime = Calendar.getInstance();
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     public void onCompletion(MediaPlayer mp) {
                         try {
@@ -366,6 +372,23 @@ public class Radio {
                 timeModifier = (long)(-1 * 300000 * r.nextDouble());
             else
                 timeModifier = (long)(300000 * r.nextDouble());
+
+            switch (onTheFifteen)
+            {
+                case 15: onTheFifteen = 30;
+                    this.timeFlag.set(Calendar.MINUTE, 30);
+                    break;
+                case 30: onTheFifteen = 45;
+                    this.timeFlag.set(Calendar.MINUTE, 45);
+                    break;
+                case 45: onTheFifteen = 0;
+                    this.timeFlag.set(Calendar.MINUTE, 0);
+                    break;
+                case 0: onTheFifteen = 15;
+                    this.timeFlag.set(Calendar.MINUTE, 15);
+            }
+
+            this.currentTime = Calendar.getInstance();
 
             timeFlag.add(Calendar.MINUTE, (int)timeModifier/60000 + 15);
             timeFlag.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
