@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Radio {
     Random r = new Random();
-    WhackAMoleRandom wamR = new WhackAMoleRandom();
+    private WhackAMoleRandom wamR = new WhackAMoleRandom();
 
     private Song[] radioSongs = new Song[20];
     private Uri[] musicExtroSpecific;
@@ -36,6 +36,9 @@ public class Radio {
     private static int flag;
     private int[] lastPlayed = new int[]{0,0,0}; //0=story, 1=track, 2=maxTrack
     private int[] theaterSequence = new int[]{0,-1,0}; //0=part, 1=track, 2=maxTrack
+
+    private int wandererKarma = 0;
+    private int wandererLevel = 1;
 
     private String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
@@ -233,6 +236,12 @@ public class Radio {
             System.out.println("Input a correct radio name in code, please.");
     }
 
+    public void setWandererFlags(int currentKarma, int currentLevel)
+    {
+        this.wandererKarma = currentKarma;
+        this.wandererLevel = currentLevel;
+    }
+
     public void playRadio(MediaPlayer mp)
     {
         nextSong =  Uri.parse("android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/radio_start");//start static
@@ -382,6 +391,7 @@ public class Radio {
                     this.timeFlag.set(Calendar.MINUTE, 45);
                     break;
                 case 45: onTheFifteen = 0;
+                    this.timeFlag.add(Calendar.HOUR_OF_DAY, 1);
                     this.timeFlag.set(Calendar.MINUTE, 0);
                     break;
                 case 0: onTheFifteen = 15;
@@ -548,5 +558,22 @@ public class Radio {
             musicIntroAudio = musicIntroGeneric[r.nextInt(musicIntroGeneric.length)];
 
         return musicIntroAudio;
+    }
+
+    public void addToNews(Song[] news)
+    {
+        this.newsStories.add(news);
+    }
+
+    public void removeFromNews(Uri uriFlag)
+    {
+        Boolean found = false;
+        int search = 0;
+
+        while(!found)
+            if(newsStories.get(search)[0].getSong() == uriFlag)
+                found = !found;
+
+        newsStories.remove(search);
     }
 }

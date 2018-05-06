@@ -1,73 +1,73 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
-import org.w3c.dom.Node;
+import android.net.Uri;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.Random;
 
 /**
- * Created by mitchelldennen on 3/28/18.
+ * Created by Grant Sipes on 5/5/18.
  */
 //still needs get and store all these values from radio class
 
 public class Quest {
-    private Date timeClosed;
-    private ArrayList<Integer> questsDone;
-    private long currentQuestTime;
-    private static ArrayList<Float> distances;
+    private String[] destination;
+    private long duration;
+    private int karmaFloor;
+    private int karmaCieling;
+    private Uri[] radioAdd;
+    private Uri[] radioRemove;
+    private Quest nextQuest;
 
-    public Quest() {
-        timeClosed = new Date();
-        questsDone = new ArrayList<>();
-        currentQuestTime = 0;
-        distances = new ArrayList<>();
+    private Random random = new Random();
+
+    Quest(String[] destination, long duration, int karmaFloor, int karmaCieling, Uri[] radioAdd, Uri[] radioRemove, Quest nextQuest)
+    {
+        this.destination = new String[destination.length];
+        System.arraycopy(destination, 0, this.destination, 0, destination.length);
+        this.duration = duration;
+        this.karmaFloor = karmaFloor;
+        this.karmaCieling = karmaCieling;
+        if (radioAdd != null)
+            System.arraycopy(radioAdd, 0, this.radioAdd, 0, radioAdd.length);
+        if (radioRemove != null)
+            System.arraycopy(radioRemove, 0, this.radioRemove, 0, radioRemove.length);
+        if (nextQuest != null)
+            this.nextQuest = nextQuest;
     }
 
-    public Quest(Date tc, ArrayList<Integer> qd, long cqt, ArrayList<Float> d) {
-
-        //transmission = new Transmission();
-        timeClosed = tc;
-        questsDone = qd;
-        currentQuestTime = cqt;
-        distances = d;
+    public String[] getDestination()
+    {
+        return this.destination;
     }
 
-    public void setDistances(ArrayList<Float> distances) {
-        this.distances = distances;
+    public long getDuration()
+    {
+        return this.duration;
     }
 
-    public static ArrayList<Float> getDistances() {
-        return distances;
+    public int getKarma()
+    {
+        return random.nextInt(karmaCieling - karmaFloor) + karmaFloor;
     }
 
-    public long getCurrentQuestTime() {
+    public void addToRadio()
+    {
 
-        return currentQuestTime;
     }
 
-    public ArrayList<Integer> getQuestsDone() {
+    public void removeFromRadio()
+    {
 
-        return questsDone;
     }
 
-    public Date getTimeClosed() {
-
-        return timeClosed;
+    public Quest getNextQuest()
+    {
+        return this.nextQuest;
     }
 
-    public void setCurrentQuestTime(long currentQuestTime) {
-
-        this.currentQuestTime = currentQuestTime;
+    public void printQuest()
+    {
+        System.out.println("First Destination: "+this.destination[0]);
     }
 
-    public void setQuestsDone(ArrayList<Integer> questsDone) {
-
-        this.questsDone = questsDone;
-    }
-
-    public void setTimeClosed(Date timeClosed) {
-
-        this.timeClosed = timeClosed;
-    }
 }
