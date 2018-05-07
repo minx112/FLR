@@ -1,7 +1,6 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
 import android.net.Uri;
-
 import java.util.Random;
 
 /**
@@ -50,14 +49,12 @@ public class Quest {
         return random.nextInt(karmaCieling - karmaFloor) + karmaFloor;
     }
 
-    public void addToRadio()
-    {
-
+    public Uri[] addToRadio(){
+        return radioAdd;
     }
 
-    public void removeFromRadio()
-    {
-
+    public Uri[] removeFromRadio() {
+        return radioRemove;
     }
 
     public Quest getNextQuest()

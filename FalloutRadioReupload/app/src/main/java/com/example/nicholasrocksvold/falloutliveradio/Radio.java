@@ -570,10 +570,17 @@ public class Radio {
         Boolean found = false;
         int search = 0;
 
-        while(!found)
-            if(newsStories.get(search)[0].getSong() == uriFlag)
+        while(!found) {
+            if (newsStories.get(search)[0].getSong() == uriFlag) {
                 found = !found;
-
+            }
+            //search++;
+            //I've tried testing this function with search++ but the radio stops playing
+        }
         newsStories.remove(search);
+    }
+
+    public ArrayList<Song[]> getNewsStories(){
+        return this.newsStories;
     }
 }
