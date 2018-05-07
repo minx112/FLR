@@ -138,6 +138,16 @@ public class Radio {
                     new Song(Uri.parse(uriPath+"escape3"))});
 
             newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"intro1")),
+                    new Song(Uri.parse(uriPath+"intro2")),
+                    new Song(Uri.parse(uriPath+"intro3")),
+                    new Song(Uri.parse(uriPath+"intro4")),
+                    new Song(Uri.parse(uriPath+"intro5")),
+                    new Song(Uri.parse(uriPath+"intro6")),
+                    new Song(Uri.parse(uriPath+"intro7")),
+                    new Song(Uri.parse(uriPath+"intro8")),});
+
+            newsStories.add(new Song[]{
                     new Song(Uri.parse(uriPath+"forecast"))});
 
             newsPost = new Uri[]{
@@ -560,9 +570,15 @@ public class Radio {
         return musicIntroAudio;
     }
 
-    public void addToNews(Song[] news)
+    public void addToNews(Uri[] news)
     {
-        this.newsStories.add(news);
+        Song temp[] = new Song[news.length];
+
+        for(int i=0; i < news.length; i++)
+        {
+            temp[i] = new Song(news[i]);
+        }
+        this.newsStories.add(temp);
     }
 
     public void removeFromNews(Uri uriFlag)
