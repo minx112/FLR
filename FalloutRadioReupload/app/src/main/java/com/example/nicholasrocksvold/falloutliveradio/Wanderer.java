@@ -3,7 +3,6 @@ package com.example.nicholasrocksvold.falloutliveradio;
 import android.net.Uri;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Calendar;
 
@@ -27,9 +26,12 @@ public class Wanderer {
     private String currentPlace;
     Radio radio;
     private Random random = new Random();
+    private Calendar startTime;
+    private Calendar timeElapsed;
+    private long timeModifier;
 
     private ArrayList<Quest> availableQuests = new ArrayList<>();
-    private ArrayList<Quest> toBeDoneQuests = new ArrayList<>();
+    private Quest toBeDoneQuests[] = new Quest[2];
     private Quest currentQuest;
 
     private String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
@@ -42,12 +44,13 @@ public class Wanderer {
         this.radio = radio;
         this.currentPlace = "Vault";
 
-        toBeDoneQuests.add(new Quest(1,
+        toBeDoneQuests[0] = new Quest(0, new String[]{"Megaton"}, 10800000, -10, 10, null, null, null, null, 1);
+        toBeDoneQuests[1] = new Quest(1,
                 new String[]{"GNR","Museum","Monument","GNR"},
                 10800000, -10, 10,
-                null, new Uri[]{Uri.parse(uriPath+"escape1"), Uri.parse(uriPath+"intro1")}, null, null, -1));
+                null, new Uri[]{Uri.parse(uriPath+"escape1"), Uri.parse(uriPath+"intro1")}, null, null, -1);
 
-        availableQuests.add(new Quest(0, new String[]{"Megaton"}, 10800000, -10, 10, null, null, null, null, 1));
+        availableQuests.add(toBeDoneQuests[0]);
     }
 
     public void start()
@@ -70,46 +73,49 @@ public class Wanderer {
             if(currentQuest.addToRadio(true) != null)
                 radio.addToNews(currentQuest.addToRadio(true));
 
+            //Not going into for loop on second quest
+
             for(int i = 0; i < currentQuest.getDestination().length; i++)
             {
+                System.out.println("Current Place: "+currentPlace);
                 switch (currentPlace)
                 {
                     case "Vault":
                         if(currentQuest.getDestination()[i].equals("Megaton")) {
-                            waitTime.setTimeInMillis((long)((HOUR_TO_MILLI / SCALE) * VAULT_TO_MEGATON));
+                            timeModifier = (long)((HOUR_TO_MILLI / SCALE) * VAULT_TO_MEGATON);
                         }
                         break;
                     case "Megaton":
                         if(currentQuest.getDestination()[i].equals("GNR"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*MEGATON_TO_GNR/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*MEGATON_TO_GNR/SCALE);
                         else if(currentQuest.getDestination()[i].equals("Megaton"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*VAULT_TO_MEGATON/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*VAULT_TO_MEGATON/SCALE);
                         else
                             System.out.println("ERROR IN NEXT DESTINATION!");
                         break;
                     case "GNR":
                         if(currentQuest.getDestination()[i].equals("Megaton"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*MEGATON_TO_GNR/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*MEGATON_TO_GNR/SCALE);
                         else if(currentQuest.getDestination()[i].equals("Museum"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*GNR_TO_MUSEUM/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*GNR_TO_MUSEUM/SCALE);
                         else if(currentQuest.getDestination()[i].equals("Monument"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE);
                         else
                             System.out.println("ERROR IN NEXT DESTINATION!");
                         break;
                     case "Museum":
                         if(currentQuest.getDestination()[i].equals("GNR"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*GNR_TO_MUSEUM/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*GNR_TO_MUSEUM/SCALE);
                         else if(currentQuest.getDestination()[i].equals("Monument"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*MUSEUM_TO_MONUMENT/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*MUSEUM_TO_MONUMENT/SCALE);
                         else
                             System.out.println("ERROR IN NEXT DESTINATION!");
                         break;
                     case "Monument":
                         if(currentQuest.getDestination()[i].equals("GNR"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE);
                         else if(currentQuest.getDestination()[i].equals("Museum"))
-                            waitTime.setTimeInMillis((long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE));
+                            timeModifier = (long)(HOUR_TO_MILLI*GNR_TO_MONUMENT/SCALE);
                         else
                             System.out.println("ERROR IN NEXT DESTINATION!");
                         break;
@@ -117,22 +123,27 @@ public class Wanderer {
                         System.out.println("ERROR IN NEXT DESTINATION!");
                 }
 
-                Calendar startTime = Calendar.getInstance();
-                Calendar timeElapsed = Calendar.getInstance();// = 0;
-                timeElapsed.setTimeInMillis(0);
-                while(timeElapsed.getTimeInMillis() <= waitTime.getTimeInMillis())
+                startTime = Calendar.getInstance();
+                timeElapsed = (Calendar)this.startTime.clone();
+                this.timeElapsed.add(Calendar.MINUTE, (int)timeModifier/60000);
+                this.timeElapsed.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
+                this.timeElapsed.add(Calendar.MILLISECOND, (int)(timeModifier%60000)%1000);
+
+                while(startTime.before(timeElapsed))
                 {
-                    timeElapsed.setTimeInMillis(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis());
+                    startTime = Calendar.getInstance();
 
                     try{ Thread.sleep(10000);}catch(InterruptedException e){}
                     System.out.println("Wanderer is traveling from: "+currentPlace);
                     System.out.println("Wanderer is traveling to  : "+currentQuest.getDestination()[i]);
-                    System.out.println("Wanderer's progress is    :"+timeElapsed.getTimeInMillis()+" out of "+waitTime.getTimeInMillis());
+                    System.out.println("Wanderer's progress is    :"+(double)startTime.getTimeInMillis()/timeElapsed.getTimeInMillis());
                 }
+
+                currentPlace = currentQuest.getDestination()[i];
             }
 
             if(currentQuest.getNextQuest() != -1)
-                availableQuests.add(chosen, findQuestById(currentQuest.getNextQuest()));
+                availableQuests.add(toBeDoneQuests[currentQuest.getNextQuest()]);
 
             if(availableQuests.size() == 0)
                 isNotDone = false;
@@ -146,15 +157,6 @@ public class Wanderer {
         }
 
         System.out.println("-=Finished Questing=-");
-    }
-
-    private Quest findQuestById(int id)
-    {
-        for(Quest quest : toBeDoneQuests)
-            if(quest.getIdentifier() == id)
-                return quest;
-
-        return null;
     }
 
     public int getKarma(){
