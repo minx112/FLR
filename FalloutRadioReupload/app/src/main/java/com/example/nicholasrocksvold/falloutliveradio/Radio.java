@@ -1,15 +1,12 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+
+import java.util.Calendar;
 import java.util.Random;
 import java.util.ArrayList;
-import android.database.sqlite.SQLiteDatabase;
-import android.content.ContentValues;
-import com.example.nicholasrocksvold.falloutliveradio.QuestDB;
-import com.example.nicholasrocksvold.falloutliveradio.QuestDBHelper;
 
 
 
@@ -32,22 +29,62 @@ public class Radio {
     private static Uri prevSong;
     private static Uri nextSong;
     private static Uri audio;
-    private String radioName;
-    private long startTime;
+    private Calendar currentTime;
+    private long timeModifier;
+    private Calendar timeFlag;
+    private int onTheFifteen;
     private static int flag;
     private int[] lastPlayed = new int[]{0,0,0}; //0=story, 1=track, 2=maxTrack
     private int[] theaterSequence = new int[]{0,-1,0}; //0=part, 1=track, 2=maxTrack
 
-    String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
+    private int wandererKarma = 0;
+    private int wandererLevel = 1;
+
+    private String uriPath = "android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/";
 
     private Context mContext;
-    private SQLiteDatabase mDatabase;
 
     Radio(Context current, String radioName)
     {
-        this.radioName = radioName; //establishes radio name
         this.mContext = current;
-        this.startTime =  System.currentTimeMillis();
+        this.currentTime = Calendar.getInstance();
+        this.timeFlag = (Calendar)this.currentTime.clone();
+
+        if(r.nextBoolean())
+            timeModifier = (long)(-1 * 300000 * r.nextDouble());
+        else
+            timeModifier = (long)(300000 * r.nextDouble());
+
+        if(currentTime.get(Calendar.MINUTE) <= 15) //less than xx:15:xx
+        {
+            System.out.println("less than 15");
+            onTheFifteen = 15;
+            this.timeFlag.set(Calendar.MINUTE, 15);
+        }
+        else if(currentTime.get(Calendar.MINUTE) <= 30) //less than xx:30:xx
+        {
+            System.out.println("less than 30");
+            onTheFifteen = 30;
+            this.timeFlag.set(Calendar.MINUTE, 30);
+        }
+        else if(currentTime.get(Calendar.MINUTE) <= 45) //less than xx:45:xx
+        {
+            System.out.println("less than 45");
+            onTheFifteen = 45;
+            this.timeFlag.set(Calendar.MINUTE, 45);
+        }
+        else //before xx:00:xx
+        {
+            System.out.println("less than 00");
+            onTheFifteen = 0;
+            this.timeFlag.add(Calendar.HOUR_OF_DAY, 1);
+            this.timeFlag.set(Calendar.MINUTE, 0);
+        }
+
+        this.timeFlag.add(Calendar.MINUTE, (int)timeModifier/60000);
+        this.timeFlag.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
+        this.timeFlag.add(Calendar.MILLISECOND, (int)(timeModifier%60000)%1000);
+        System.out.println("Current Flag: "+timeFlag.toString());
 
         if(radioName.toUpperCase().matches("GNR")) {
 
@@ -99,6 +136,16 @@ public class Radio {
                     new Song(Uri.parse(uriPath+"escape1")),
                     new Song(Uri.parse(uriPath+"escape2")),
                     new Song(Uri.parse(uriPath+"escape3"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"intro1")),
+                    new Song(Uri.parse(uriPath+"intro2")),
+                    new Song(Uri.parse(uriPath+"intro3")),
+                    new Song(Uri.parse(uriPath+"intro4")),
+                    new Song(Uri.parse(uriPath+"intro5")),
+                    new Song(Uri.parse(uriPath+"intro6")),
+                    new Song(Uri.parse(uriPath+"intro7")),
+                    new Song(Uri.parse(uriPath+"intro8")),});
 
             newsStories.add(new Song[]{
                     new Song(Uri.parse(uriPath+"forecast"))});
@@ -199,6 +246,12 @@ public class Radio {
             System.out.println("Input a correct radio name in code, please.");
     }
 
+    public void setWandererFlags(int currentKarma, int currentLevel)
+    {
+        this.wandererKarma = currentKarma;
+        this.wandererLevel = currentLevel;
+    }
+
     public void playRadio(MediaPlayer mp)
     {
         nextSong =  Uri.parse("android.resource://com.example.nicholasrocksvold.falloutliveradio/raw/radio_start");//start static
@@ -214,9 +267,13 @@ public class Radio {
 
         //if(wanderer.isNotDone())
         while(true) {
-            startTime = System.currentTimeMillis(); //fetch starting time
-            //play music for 5 minutes
-            while ((System.currentTimeMillis() - startTime) < 300000) {
+
+            System.out.println("Current Time: "+currentTime.toString());
+            System.out.println("Current Flag: "+timeFlag.toString());
+
+            //play music until about the 15 of the hour is hit
+            while (currentTime.before(this.timeFlag)) {
+                this.currentTime = Calendar.getInstance();
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     public void onCompletion(MediaPlayer mp) {
                         try {
@@ -246,7 +303,6 @@ public class Radio {
             flag = 0;
             while(flag != -1)
             {
-                System.out.println("Flag: "+flag);
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     public void onCompletion(MediaPlayer mp) {
 
@@ -330,6 +386,35 @@ public class Radio {
                     }
                 });
             }
+
+            if(r.nextBoolean())
+                timeModifier = (long)(-1 * 300000 * r.nextDouble());
+            else
+                timeModifier = (long)(300000 * r.nextDouble());
+
+            switch (onTheFifteen)
+            {
+                case 15: onTheFifteen = 30;
+                    this.timeFlag.set(Calendar.MINUTE, 30);
+                    break;
+                case 30: onTheFifteen = 45;
+                    this.timeFlag.set(Calendar.MINUTE, 45);
+                    break;
+                case 45: onTheFifteen = 0;
+                    this.timeFlag.add(Calendar.HOUR_OF_DAY, 1);
+                    this.timeFlag.set(Calendar.MINUTE, 0);
+                    break;
+                case 0: onTheFifteen = 15;
+                    this.timeFlag.set(Calendar.MINUTE, 15);
+            }
+
+            this.currentTime = Calendar.getInstance();
+
+            timeFlag.add(Calendar.MINUTE, (int)timeModifier/60000 + 15);
+            timeFlag.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
+            timeFlag.add(Calendar.MILLISECOND, (int)(timeModifier%60000)%1000);
+
+            System.out.println("Current Flag: "+timeFlag.toString());
         }
                 /*
                 else
@@ -345,7 +430,7 @@ public class Radio {
         wamR.alterPriority(radioSongs, chosenSong);
     }
 
-    public Uri setMusicExtro() {
+    private Uri setMusicExtro() {
         Uri musicExtroAudio;
 
         if(prevSong.equals(Uri.parse(uriPath+"gnrsong1")))
@@ -451,7 +536,7 @@ public class Radio {
         return psaInfoAudio;
     }
 
-    public Uri setMusicIntro()
+    private Uri setMusicIntro()
     {
         Uri musicIntroAudio;
 
@@ -484,18 +569,37 @@ public class Radio {
 
         return musicIntroAudio;
     }
-/*
-    public void addDB(Quest q) {
-        ContentValues values = getContentValues(q);
-        mDatabase.insert(QuestDB.QuestTable.NAME, null, values);
+
+    public void addToNews(Uri[] news)
+    {
+        Song temp[] = new Song[news.length];
+
+        for(int i=0; i < news.length; i++)
+        {
+            temp[i] = new Song(news[i]);
+        }
+        this.newsStories.add(temp);
     }
-    private static ContentValues getContentValues(Quest quest) {
-        ContentValues values = new ContentValues();
-        values.put(QuestDB.QuestTable.Cols.timeClosed, Quest.timeClosed);
-        values.put(QuestDB.QuestTable.Cols.questsDone, Quest.questsDone);
-        values.put(QuestDB.QuestTable.Cols.currentQuestTime, Quest.currentQuestTime);
-        values.put(QuestDB.QuestTable.Cols.distances,Quest.distances);
+
+    public void removeFromNews(Uri uriFlag)
+    {
+        Boolean found = false;
+        int search = 0;
+
+        while(!found) {
+            if (newsStories.get(search)[0].getSong() == uriFlag) {
+                found = !found;
+            }
+            //search++;
+            //I've tried testing this function with search++ but the radio stops playing
+        }
+        newsStories.remove(search);
     }
+
+    public ArrayList<Song[]> getNewsStories(){
+        return this.newsStories;
+    }
+<<<<<<< HEAD
         public static final String currentQuest = "currentquest";
             public static final String timeClosed = "timeclosed";// date convert to date
             public static final String questsDone = "questsdone";// make string, seperate "ints" by coma, parse string to get sub strings of quests done
@@ -556,4 +660,6 @@ public void addDB(Quest q) {
     //method to find out if a quest is done? save it in quest object
 
 }
+=======
+>>>>>>> aa49f8587d8359c914161dad0e8dd54f54b40b86
 }
