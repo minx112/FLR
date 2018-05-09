@@ -16,13 +16,52 @@ public class Quest {
     private ArrayList<Integer> questsDone;
     private long currentQuestTime;
     private static ArrayList<Float> distances;
+    private String destination;
+    private int duration;
+    private int karmaChange;
 
     public Quest() {
         timeClosed = new Date();
         questsDone = new ArrayList<>();
         currentQuestTime = 0;
         distances = new ArrayList<>();
+        destination = new String();
+        duration = 0;
+        karmaChange = 0;
+
     }
+
+
+    public void setKarmaChange(int karmaChange) {
+        this.karmaChange = karmaChange;
+    }
+
+    public void setDuration(int duration) {
+
+        this.duration = duration;
+    }
+
+    public void setDestination(String destination) {
+
+        this.destination = destination;
+    }
+
+    public int getKarmaChange() {
+
+        return karmaChange;
+    }
+
+    public int getDuration() {
+
+        return duration;
+    }
+
+    public String getDestination() {
+
+        return destination;
+    }
+
+
 
     public Quest(Date tc, ArrayList<Integer> qd, long cqt, ArrayList<Float> d) {
 
