@@ -16,8 +16,8 @@ public class QuestCurserWrapper extends CursorWrapper {
     }
     public Quest getQuest() {
         //maybe set this as a a method in radio
-        Integer currentQuest = getInt(getColumnIndex(QuestDB.QuestTable.Cols.currentQuest));
-        Integer timeClosed = getInt(getColumnIndex(QuestDB.QuestTable.Cols.timeClosed));
+        String currentQuest = getString(getColumnIndex(QuestDB.QuestTable.Cols.currentQuest));
+        String timeClosed = getString(getColumnIndex(QuestDB.QuestTable.Cols.timeClosed));
         String questsDone = getString(getColumnIndex(QuestDB.QuestTable.Cols.questsDone));
         Integer currentQuestTime = getInt(getColumnIndex(QuestDB.QuestTable.Cols.currentQuestTime));
         String gender = getString(getColumnIndex(QuestDB.QuestTable.Cols.gender));
