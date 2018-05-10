@@ -14,7 +14,7 @@ public class Radio {
     Random r = new Random();
     private WhackAMoleRandom wamR = new WhackAMoleRandom();
 
-    private Song[] radioSongs = new Song[20];
+    private Song[] radioSongs = new Song[50];
     private Uri[] musicExtroSpecific;
     private Uri[] musicIntroSpecific;
     private Uri[] musicIntroGeneric = new Uri[2];
@@ -57,25 +57,21 @@ public class Radio {
 
         if(currentTime.get(Calendar.MINUTE) <= 15) //less than xx:15:xx
         {
-            System.out.println("less than 15");
             onTheFifteen = 15;
             this.timeFlag.set(Calendar.MINUTE, 15);
         }
         else if(currentTime.get(Calendar.MINUTE) <= 30) //less than xx:30:xx
         {
-            System.out.println("less than 30");
             onTheFifteen = 30;
             this.timeFlag.set(Calendar.MINUTE, 30);
         }
         else if(currentTime.get(Calendar.MINUTE) <= 45) //less than xx:45:xx
         {
-            System.out.println("less than 45");
             onTheFifteen = 45;
             this.timeFlag.set(Calendar.MINUTE, 45);
         }
         else //before xx:00:xx
         {
-            System.out.println("less than 00");
             onTheFifteen = 0;
             this.timeFlag.add(Calendar.HOUR_OF_DAY, 1);
             this.timeFlag.set(Calendar.MINUTE, 0);
@@ -84,11 +80,12 @@ public class Radio {
         this.timeFlag.add(Calendar.MINUTE, (int)timeModifier/60000);
         this.timeFlag.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
         this.timeFlag.add(Calendar.MILLISECOND, (int)(timeModifier%60000)%1000);
-        System.out.println("Current Flag: "+timeFlag.toString());
+
+        System.out.println("Current News Flag: "+timeFlag.get(Calendar.HOUR_OF_DAY)+"H "+timeFlag.get(Calendar.MINUTE)+"M");
 
         if(radioName.toUpperCase().matches("GNR")) {
 
-            for(int i = 1; i < 21; i++)
+            for(int i = 1; i < 51; i++)
                 radioSongs[i - 1] = new Song(Uri.parse(uriPath+"gnrsong"+i));
 
             musicExtroSpecific = new Uri[]{
@@ -145,10 +142,52 @@ public class Radio {
                     new Song(Uri.parse(uriPath+"intro5")),
                     new Song(Uri.parse(uriPath+"intro6")),
                     new Song(Uri.parse(uriPath+"intro7")),
-                    new Song(Uri.parse(uriPath+"intro8")),});
+                    new Song(Uri.parse(uriPath+"intro8"))});
 
             newsStories.add(new Song[]{
                     new Song(Uri.parse(uriPath+"forecast"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"grayditch1")),
+                    new Song(Uri.parse(uriPath+"grayditch2")),
+                    new Song(Uri.parse(uriPath+"grayditch3"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"praise_brotherhood1")),
+                    new Song(Uri.parse(uriPath+"praise_brotherhood2")),
+                    new Song(Uri.parse(uriPath+"praise_brotherhood3")),
+                    new Song(Uri.parse(uriPath+"praise_brotherhood4"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"superhuman1")),
+                    new Song(Uri.parse(uriPath+"superhuman2")),
+                    new Song(Uri.parse(uriPath+"superhuman3")),
+                    new Song(Uri.parse(uriPath+"superhuman4")),
+                    new Song(Uri.parse(uriPath+"superhuman5"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"talon1")),
+                    new Song(Uri.parse(uriPath+"talon2")),
+                    new Song(Uri.parse(uriPath+"talon3"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"tensions1")),
+                    new Song(Uri.parse(uriPath+"tensions2")),
+                    new Song(Uri.parse(uriPath+"tensions3")),
+                    new Song(Uri.parse(uriPath+"tensions4")),
+                    new Song(Uri.parse(uriPath+"tensions5"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"tenpenny_tower1")),
+                    new Song(Uri.parse(uriPath+"tenpenny_tower2")),
+                    new Song(Uri.parse(uriPath+"tenpenny_tower3"))});
+
+            newsStories.add(new Song[]{
+                    new Song(Uri.parse(uriPath+"trees1")),
+                    new Song(Uri.parse(uriPath+"trees2")),
+                    new Song(Uri.parse(uriPath+"trees3")),
+                    new Song(Uri.parse(uriPath+"trees4")),
+                    new Song(Uri.parse(uriPath+"trees5"))});
 
             newsPost = new Uri[]{
                     Uri.parse(uriPath+"post_generic1"),
@@ -268,15 +307,13 @@ public class Radio {
         //if(wanderer.isNotDone())
         while(true) {
 
-            System.out.println("Current Time: "+currentTime.toString());
-            System.out.println("Current Flag: "+timeFlag.toString());
-
             //play music until about the 15 of the hour is hit
             while (currentTime.before(this.timeFlag)) {
                 this.currentTime = Calendar.getInstance();
                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     public void onCompletion(MediaPlayer mp) {
                         try {
+                            System.out.println("Current News Flag: "+timeFlag.get(Calendar.HOUR_OF_DAY)+"H "+timeFlag.get(Calendar.MINUTE)+"M");
                             mp.reset();
                             mp.setDataSource(mContext, nextSong);
                             mp.prepare();
@@ -414,7 +451,7 @@ public class Radio {
             timeFlag.add(Calendar.SECOND, (int)(timeModifier%60000)/1000);
             timeFlag.add(Calendar.MILLISECOND, (int)(timeModifier%60000)%1000);
 
-            System.out.println("Current Flag: "+timeFlag.toString());
+            System.out.println("Current News Flag: "+timeFlag.get(Calendar.HOUR_OF_DAY)+"H "+timeFlag.get(Calendar.MINUTE)+"M");
         }
                 /*
                 else
@@ -579,87 +616,26 @@ public class Radio {
             temp[i] = new Song(news[i]);
         }
         this.newsStories.add(temp);
+
+        System.out.println("After add, News Stories has:");
+        for(int i=0;i<newsStories.size();i++)
+            System.out.println(newsStories.get(i)[0].getSong().getPath());
     }
 
     public void removeFromNews(Uri uriFlag)
     {
-        Boolean found = false;
         int search = 0;
 
-        while(!found) {
-            if (newsStories.get(search)[0].getSong() == uriFlag) {
-                found = !found;
+        for(int i=0;search<newsStories.size();i++)
+            if (newsStories.get(i)[0].getSong().equals(uriFlag)) {
+                search = i;
+                break;
             }
-            //search++;
-            //I've tried testing this function with search++ but the radio stops playing
-        }
+
         newsStories.remove(search);
-    }
 
-    public ArrayList<Song[]> getNewsStories(){
-        return this.newsStories;
+        System.out.println("After remove, News Stories has:");
+        for(int i=0;i<newsStories.size();i++)
+            System.out.println(newsStories.get(i)[0].getSong().getPath());
     }
-<<<<<<< HEAD
-        public static final String currentQuest = "currentquest";
-            public static final String timeClosed = "timeclosed";// date convert to date
-            public static final String questsDone = "questsdone";// make string, seperate "ints" by coma, parse string to get sub strings of quests done
-            public static final Integer currentQuestTime = 0; // keep track in miliseconds
-            public static final String gender = "gender";
-            public static final String lastTheater = "lasttheater";
-            public static final Integer currentQuestLength = 0;
-*/
-public void addDB(Quest q) {
-    ContentValues values = getContentValues(q);
-    mDatabase.insert(QuestDB.QuestTable.NAME, null, values);
-}
-    private static ContentValues getContentValues(Quest quest, Wanderer wanderer) {
-        // usage?? and why wont the get functions register
-        ContentValues values = new ContentValues();
-        //quest = new Quest();
-        values.put(QuestDB.QuestTable.Cols.timeClosed, quest.getTimeClosed().toString()); // expects key value pair
-        values.put(QuestDB.QuestTable.Cols.questsDone, quest.getQuestsDone().toString());//
-        values.put(QuestDB.QuestTable.Cols.currentQuestTime.toString(), quest.getCurrentQuestTime().toString());
-        values.put(QuestDB.QuestTable.Cols.gender, wanderer.getGender);
-        values.put(QuestDB.QuestTable.Cols.lastTheater, ??????);
-        values.put(QuestDB.QuestTable.Cols.currentQuestLength, ?????);
-        return values;
-    }
-    private QuestCurserWrapper queryQuests(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(QuestDB.QuestTable.NAME,null,whereClause,whereArgs,null,null,null);
-        return new QuestCurserWrapper(cursor);
-    }
-    public Quest getQuest(String currentQuest) {
-        QuestCurserWrapper cursor = queryQuests(QuestDB.QuestTable.Cols.currentQuest + " = ?"
-                , new String[] {currentQuest});
-        try {
-            if(cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getQuest();
-        } finally {
-            cursor.close();
-        }
-    }
-    //method to parse the string quests done
-    public ArrayList<Integer> parseQuestsDone(String qd) {
-        //load String from database
-
-        ArrayList<Integer> questsDone = new ArrayList<>();
-        String [] tokens = qd.split(",");
-        for(String t : tokens ) {
-            questsDone.add(Integer.parseInt(t));
-        }
-    }
-
-    public void questsAvailable() {
-        //a bunch of if statements
-    }
-
-    //method to parse throu distances
-    //method to find out if a quest is done? save it in quest object
-
-}
-=======
->>>>>>> aa49f8587d8359c914161dad0e8dd54f54b40b86
 }
