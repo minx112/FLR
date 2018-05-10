@@ -1,6 +1,5 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -15,22 +14,10 @@ public class RadioMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         final Radio radioGNR = new Radio(this, "GNR");
-        final Wanderer wanderer= new Wanderer(radioGNR);
-
-        class startTheWanderer extends AsyncTask<Radio, Void, Void>{
-            @Override
-            protected Void doInBackground(Radio... params){
-
-                wanderer.start();
-
-                return null;
-            }
-        }
 
         class playTheRadio extends AsyncTask<MediaPlayer, Void, Void>{
             @Override
             protected Void doInBackground(MediaPlayer... params){
-
                 radioGNR.playRadio(params[0]);
 
                 return null;
@@ -44,8 +31,7 @@ public class RadioMenu extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         final playTheRadio playRadio = new playTheRadio();
-        final startTheWanderer startWanderer = new startTheWanderer();
-        startWanderer.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 
         Button mPlayButton = findViewById(R.id.play_button);
         Button mStopButton = findViewById(R.id.play_button2);
