@@ -13,13 +13,8 @@ public class QuestDB {
         public static final class Cols {
 <<<<<<< HEAD
 <<<<<<< HEAD
-<<<<<<< HEAD
             public static final Integer currentQuest = 0;
             public static final Integer timeClosed = 0;// date convert to date
-=======
-            public static final String currentQuest = "currentquest";
-            public static final String timeClosed = "timeclosed";// date convert to date
->>>>>>> parent of 97b722a... newest
 =======
             public static final String currentQuest = "currentquest";
             public static final String timeClosed = "timeclosed";// date convert to date
