@@ -550,72 +550,14 @@ public void addDB(Quest q) {
             questsDone.add(Integer.parseInt(t));
         }
     }
-<<<<<<< HEAD
 >>>>>>> parent of fd28234... Merge branch 'master' of https://github.com/minx112/Fallout-Live-radio
-=======
-<<<<<<< HEAD
-        public static final String currentQuest = "currentquest";
-            public static final String timeClosed = "timeclosed";// date convert to date
-            public static final String questsDone = "questsdone";// make string, seperate "ints" by coma, parse string to get sub strings of quests done
-            public static final Integer currentQuestTime = 0; // keep track in miliseconds
-            public static final String gender = "gender";
-            public static final String lastTheater = "lasttheater";
-            public static final Integer currentQuestLength = 0;
-*/
-public void addDB(Quest q) {
-    ContentValues values = getContentValues(q);
-    mDatabase.insert(QuestDB.QuestTable.NAME, null, values);
-}
-    private static ContentValues getContentValues(Quest quest, Wanderer wanderer) {
-        // usage?? and why wont the get functions register
-        ContentValues values = new ContentValues();
-        //quest = new Quest();
-        values.put(QuestDB.QuestTable.Cols.timeClosed, quest.getTimeClosed().toString()); // expects key value pair
-        values.put(QuestDB.QuestTable.Cols.questsDone, quest.getQuestsDone().toString());//
-        values.put(QuestDB.QuestTable.Cols.currentQuestTime.toString(), quest.getCurrentQuestTime().toString());
-        values.put(QuestDB.QuestTable.Cols.gender, wanderer.getGender);
-        values.put(QuestDB.QuestTable.Cols.lastTheater, ??????);
-        values.put(QuestDB.QuestTable.Cols.currentQuestLength, ?????);
-        return values;
-    }
-    private QuestCurserWrapper queryQuests(String whereClause, String[] whereArgs) {
-        Cursor cursor = mDatabase.query(QuestDB.QuestTable.NAME,null,whereClause,whereArgs,null,null,null);
-        return new QuestCurserWrapper(cursor);
-    }
-    public Quest getQuest(String currentQuest) {
-        QuestCurserWrapper cursor = queryQuests(QuestDB.QuestTable.Cols.currentQuest + " = ?"
-                , new String[] {currentQuest});
-        try {
-            if(cursor.getCount() == 0) {
-                return null;
-            }
-            cursor.moveToFirst();
-            return cursor.getQuest();
-        } finally {
-            cursor.close();
-        }
-    }
-    //method to parse the string quests done
-    public ArrayList<Integer> parseQuestsDone(String qd) {
-        //load String from database
 
-        ArrayList<Integer> questsDone = new ArrayList<>();
-        String [] tokens = qd.split(",");
-        for(String t : tokens ) {
-            questsDone.add(Integer.parseInt(t));
-        }
-    }
->>>>>>> parent of 97b722a... newest
 
-    public void questsAvailable() {
-        //a bunch of if statements
-    }
 
     //method to parse throu distances
     //method to find out if a quest is done? save it in quest object
 
 }
-<<<<<<< HEAD
 <<<<<<< HEAD
 
 =======
@@ -623,8 +565,4 @@ public void addDB(Quest q) {
 =======
 */
 >>>>>>> parent of bc22710... stuff
-=======
-=======
->>>>>>> aa49f8587d8359c914161dad0e8dd54f54b40b86
->>>>>>> parent of 97b722a... newest
 }
