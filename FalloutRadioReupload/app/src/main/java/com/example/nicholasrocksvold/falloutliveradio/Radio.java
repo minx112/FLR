@@ -497,7 +497,6 @@ public class Radio {
         values.put(QuestDB.QuestTable.Cols.distances,Quest.distances);
     }
 <<<<<<< HEAD
-<<<<<<< HEAD
 =======
         public static final String currentQuest = "currentquest";
             public static final String timeClosed = "timeclosed";// date convert to date
@@ -562,7 +561,4 @@ public void addDB(Quest q) {
 
 =======
 >>>>>>> parent of fd28234... Merge branch 'master' of https://github.com/minx112/Fallout-Live-radio
-=======
-*/
->>>>>>> parent of bc22710... stuff
 }
