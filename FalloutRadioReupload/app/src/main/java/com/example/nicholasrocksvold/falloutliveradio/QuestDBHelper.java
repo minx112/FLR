@@ -18,21 +18,12 @@ public class QuestDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table " + QuestDB.QuestTable.NAME + "(" + "_id integer primary key autoincrement, " +
-                QuestDB.QuestTable.Cols.currentQuest + ", " +
-                QuestDB.QuestTable.Cols.timeClosed + ", " +
-                QuestDB.QuestTable.Cols.currentQuestTime + ", " +
-                QuestDB.QuestTable.Cols.questsDone + ", " +
-                QuestDB.QuestTable.Cols.currentQuestTime + ", " +
-                QuestDB.QuestTable.Cols.gender + ", " +
-                QuestDB.QuestTable.Cols.lastTheater + ", " +
-                QuestDB.QuestTable.Cols.currentQuestLength
-                /*+
-                QuestDB.QuestTable.Cols.distances*/ + ")");
+                QuestDB.QuestTable.Cols.timeClosed + ", " + QuestDB.QuestTable.Cols.currentQuestTime + ", " +
+                QuestDB.QuestTable.Cols.questsDone + ", " + QuestDB.QuestTable.Cols.distances + ")");
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //does this need to be implemented
+
     }
 
 }
