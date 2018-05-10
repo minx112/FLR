@@ -1,17 +1,15 @@
 package com.example.nicholasrocksvold.falloutliveradio;
 
-import org.w3c.dom.Node;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import android.net.Uri;
+import java.util.Random;
 
 /**
- * Created by mitchelldennen on 3/28/18.
+ * Created by Grant Sipes on 5/5/18.
  */
 //still needs get and store all these values from radio class
 
 public class Quest {
+<<<<<<< HEAD
     private Date timeClosed;
     private ArrayList<Integer> questsDone;
     private long currentQuestTime;
@@ -70,43 +68,82 @@ public class Quest {
         questsDone = qd;
         currentQuestTime = cqt;
         distances = d;
+=======
+    private int identifier;
+    private String[] destination;
+    private long duration;
+    private int karmaFloor;
+    private int karmaCieling;
+    private Uri[] radioAddBefore;
+    private Uri[] radioRemoveBefore;
+    private Uri[] radioAddAfter;
+    private Uri[] radioRemoveAfter;
+    private int nextQuest;
+
+    private Random random = new Random();
+
+    Quest(int identifier, String[] destination, long duration, int karmaFloor, int karmaCieling, Uri[] radioAddBefore, Uri[] radioRemoveBefore, Uri[] radioAddAfter, Uri[] radioRemoveAfter, int nextQuest)
+    {
+        this.identifier = identifier;
+        this.destination = new String[destination.length];
+        System.arraycopy(destination, 0, this.destination, 0, destination.length);
+        this.duration = duration;
+        this.karmaFloor = karmaFloor;
+        this.karmaCieling = karmaCieling;
+        if(radioAddBefore != null)
+            this.radioAddBefore = radioAddBefore.clone();
+        if(radioRemoveBefore != null)
+            this.radioRemoveBefore = radioRemoveBefore.clone();
+        if (radioAddAfter != null)
+            this.radioAddAfter = radioAddAfter.clone();
+        if (radioRemoveAfter != null)
+            this.radioRemoveAfter = radioRemoveAfter.clone();
+        this.nextQuest = nextQuest;
     }
 
-    public void setDistances(ArrayList<Float> distances) {
-        this.distances = distances;
+    public String[] getDestination()
+    {
+        return this.destination;
+>>>>>>> aa49f8587d8359c914161dad0e8dd54f54b40b86
     }
 
-    public static ArrayList<Float> getDistances() {
-        return distances;
+    public long getDuration()
+    {
+        return this.duration;
     }
 
-    public long getCurrentQuestTime() {
-
-        return currentQuestTime;
+    public int getKarma()
+    {
+        return random.nextInt(karmaCieling - karmaFloor) + karmaFloor;
     }
 
-    public ArrayList<Integer> getQuestsDone() {
-
-        return questsDone;
+    public Uri[] addToRadio(boolean timing){
+        if(timing)
+            return this.radioAddBefore;
+        else
+            return this.radioAddAfter;
     }
 
-    public Date getTimeClosed() {
-
-        return timeClosed;
+    public Uri[] removeFromRadio(boolean timing) {
+        if(timing)
+            return this.radioRemoveBefore;
+        else
+            return this.radioRemoveAfter;
     }
 
-    public void setCurrentQuestTime(long currentQuestTime) {
-
-        this.currentQuestTime = currentQuestTime;
+    public int getNextQuest()
+    {
+        return this.nextQuest;
     }
 
-    public void setQuestsDone(ArrayList<Integer> questsDone) {
-
-        this.questsDone = questsDone;
+    public void printQuest()
+    {
+        System.out.println("First Destination: "+this.destination[0]);
     }
 
-    public void setTimeClosed(Date timeClosed) {
-
-        this.timeClosed = timeClosed;
+    public int getIdentifier()
+    {
+        return this.identifier;
     }
+
 }
