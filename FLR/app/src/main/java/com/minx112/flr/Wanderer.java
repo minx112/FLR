@@ -188,3 +188,8 @@ public class Wanderer {
         this.isNotDone = notDone;
     }
 }
+
+//TODO: get functions so onClose can easily get data
+//TODO: full quest lines
+//TODO: seperate file that sets quests instead of having it here
+//TODO: implement ending (isDone)

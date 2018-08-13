@@ -72,3 +72,10 @@ public class RadioMenu extends AppCompatActivity{
         });
     }
 }
+
+//TODO: Persistant data with Shared Preferences (key-value table)
+//TODO: Create onClose that saves current position in radio/Quest
+//TODO: Create Catchup function that takes saved close time and uses current time to catch quest/radio up
+//TODO: graphics
+//TODO: Settings
+//TODO: Multiple stations that are switchable

@@ -23,7 +23,7 @@ public class Radio {
     private ArrayList<Song[]> psaInfos = new ArrayList<>();
     private ArrayList<Uri[]> radioTheater = new ArrayList<>();
 
-    private static Uri prevSong;
+    private static Uri prevSong; //also functionally current song
     private static Uri nextSong;
     private static Uri audio;
     private Calendar currentTime;
@@ -636,3 +636,5 @@ public class Radio {
             System.out.println(newsStories.get(i)[0].getSong().getPath());
     }
 }
+
+//TODO: getfunctions so onClose can easily get data
