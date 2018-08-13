@@ -1,5 +1,0 @@
-[musicExtroSpecific / radioHello] [ {generalNews} / {karmaNews} ] [psaIntro] [psaInfos] [musicIntroSpecific / musicIntroGeneric]
-
-{generalNews} = [newsLink] [newsStory] [newsPost]
-
-{karmaNews} = [playerKarmaTitles] [playerExploitMS] [newsPost]
